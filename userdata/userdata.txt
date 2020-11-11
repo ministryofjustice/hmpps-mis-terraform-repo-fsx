@@ -1,0 +1,30 @@
+<powershell>
+$misCreds = New-Credential -UserName "${user}" -Password "${password}"
+Install-User -Credential $misCreds
+Add-GroupMember -Name Administrators -Member ${user}
+
+$bossoCreds = New-Credential -UserName "${bosso_user}" -Password "${bosso_password}"
+Install-User -Credential $bossoCreds
+Add-GroupMember -Name Administrators -Member ${bosso_user}
+
+$ComputerName = "${host_name}"
+
+Remove-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -name "Hostname"
+Remove-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -name "NV Hostname"
+
+New-PSDrive -name HKU -PSProvider "Registry" -Root "HKEY_USERS"
+
+Set-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\Computername\Computername" -name "Computername" -value $ComputerName
+Set-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\Computername\ActiveComputername" -name "Computername" -value $ComputerName
+Set-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -name "Hostname" -value $ComputerName
+Set-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" -name "NV Hostname" -value  $ComputerName
+Set-ItemProperty -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -name "AltDefaultDomainName" -value $ComputerName
+Set-ItemProperty -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -name "DefaultDomainName" -value $ComputerName
+
+$MaxSize = (Get-PartitionSupportedSize -DriveLetter C).sizeMax
+Resize-Partition -DriveLetter C -Size $MaxSize
+
+Install-WindowsFeature RSAT-ADDS
+
+</powershell>
+<persist>true</persist>
