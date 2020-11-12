@@ -26,4 +26,8 @@ locals {
   secondary_subnet_id    = local.private_subnet_ids[1]
 
   ad_admin_password      = var.ad_admin_password
+
+  mis_ad_name        = "${local.environment_name}.internal"  # delius-mis-dev.internal
+  mis_ad_short_name  = local.environment_name                # delius-mis-dev
+
 }
