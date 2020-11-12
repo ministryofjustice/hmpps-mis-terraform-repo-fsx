@@ -38,6 +38,9 @@ $secpasswd = ConvertTo-SecureString ${ad_admin_user_password} -AsPlainText -Forc
 $domaincreds = New-Object System.Management.Automation.PSCredential ("${ad_domain_name}\${ad_admin_user_name}", $secpasswd)
 New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Credential $domaincreds -LocalPath Z:
 
+# Now add the computer to the domain
+Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
+Restart-Computer -Force
 
 </powershell>
 <persist>true</persist>
