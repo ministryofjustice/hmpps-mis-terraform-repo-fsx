@@ -11,6 +11,7 @@ data "template_file" "instance_userdata" {
     bosso_password  = data.aws_ssm_parameter.bosso_password.value
     ad_dns_ip_1     = local.ad_dns_ip_1
     ad_dns_ip_2     = local.ad_dns_ip_2
+    ad_domain_name  = local.ad_domain_name
     ad_admin_user_name = "Admin"
     ad_admin_user_password = "aabbcc112233"
     bfs_filesystem_dns_name = local.bfs_filesystem_dns_name

@@ -28,16 +28,18 @@ Install-WindowsFeature RSAT-ADDS
 
 # set DNS servers to AD servers so we can find FSx DNS entries
 $serverAddresses = Get-DNSClientServerAddress -InterfaceAlias Ether* -AddressFamily IPv4
-$ad_dns_ip_1=${ad_dns_ip_1}
-$ad_dns_ip_2=${ad_dns_ip_2}
+$ad_dns_ip_1="${ad_dns_ip_1}"
+$ad_dns_ip_2="${ad_dns_ip_2}"
 Set-DNSClientServerAddress -interfaceIndex $serverAddresses.InterfaceIndex -ServerAddresses ("$ad_dns_ip_1", "$ad_dns_ip_2")
 
 # Windows 2016 Allows global mapping as 
 # see https://medium.com/@bberkayilmaz/mounting-aws-fsx-with-autoscaling-in-terraform-eee3d115d49c - scenario 3
 $secpasswd = ConvertTo-SecureString ${ad_admin_user_password} -AsPlainText -Force
-$domaincreds = New-Object System.Management.Automation.PSCredential ("${ad_admin_user_name}", "$secpasswd")
+$domaincreds = New-Object System.Management.Automation.PSCredential ("${ad_domain_name}\${ad_admin_user_name}", $secpasswd)
 New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Credential $domaincreds -LocalPath Z:
 
 
 </powershell>
 <persist>true</persist>
+
+
