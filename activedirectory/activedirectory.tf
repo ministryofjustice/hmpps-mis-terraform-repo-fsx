@@ -3,9 +3,9 @@
 
 resource "aws_directory_service_directory" "mis_ad" {   
   name        = "${local.environment_name}.internal"  # delius-mis-dev.internal
-  short_name  = local.environment_name                # 
+  short_name  = local.environment_name                # delius-mis-dev
   description = "Microsoft AD for ${local.environment_name}.internal"
-  password    = "SuperSecretPassw0rd"
+  password    = local.ad_admin_password
   edition     = "Standard"
   type        = "MicrosoftAD"
 

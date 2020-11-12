@@ -25,3 +25,11 @@ output "bfs_ami_id" {
 output "bfs_instance_type" {
   value = aws_instance.bfs_server.*.instance_type
 }
+
+
+output "ad_dns_ip_1" {
+  value = local.ad_dns_ip_1
+}
+output "ad_dns_ip_2" {
+  value = local.ad_dns_ip_2
+}

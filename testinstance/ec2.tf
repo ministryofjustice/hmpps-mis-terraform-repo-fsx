@@ -9,6 +9,18 @@ data "template_file" "instance_userdata" {
     password        = data.aws_ssm_parameter.password.value
     bosso_user      = data.aws_ssm_parameter.bosso_user.value
     bosso_password  = data.aws_ssm_parameter.bosso_password.value
+    ad_dns_ip_1     = local.ad_dns_ip_1
+    ad_dns_ip_2     = local.ad_dns_ip_2
+    ad_admin_user_name = "Admin"
+    ad_admin_user_password = "aabbcc112233"
+    bfs_filesystem_dns_name = local.bfs_filesystem_dns_name
+  }
+}
+
+
+resource "null_resource" "userdatarenderdebug" {
+  triggers = {
+    json = data.template_file.instance_userdata[0].rendered
   }
 }
 

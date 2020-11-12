@@ -100,6 +100,35 @@ data "terraform_remote_state" "mis-bfs-ha" {
 }
 
 #-------------------------------------------------------------
+### Getting the active directory details
+#-------------------------------------------------------------
+data "terraform_remote_state" "activedirectory" {
+  backend = "s3"
+
+  config = {
+    bucket = var.remote_state_bucket_name
+    key    = "mis-dev/activedirectory/terraform.tfstate"
+    region = var.region
+  }
+}
+
+
+#-------------------------------------------------------------
+### Getting the fsx filesystem details
+#-------------------------------------------------------------
+data "terraform_remote_state" "fsx" {
+  backend = "s3"
+
+  config = {
+    bucket = var.remote_state_bucket_name
+    key    = "mis-dev/fsx/terraform.tfstate"
+    region = var.region
+  }
+}
+
+
+
+#-------------------------------------------------------------
 ### Getting the latest amazon ami
 #-------------------------------------------------------------
 data "aws_ami" "amazon_ami" {
@@ -107,7 +136,7 @@ data "aws_ami" "amazon_ami" {
 
   filter {
     name   = "name"
-    values = ["HMPPS MIS NART BFS Windows Server master *"]
+    values = ["Windows_Server-2019-English-Full-Base*"]
   }
 
   filter {
@@ -125,7 +154,7 @@ data "aws_ami" "amazon_ami" {
     values = ["ebs"]
   }
 
-  owners = ["895523100917"]
+  owners = ["amazon"]
 }
 
 #-------------------------------------------------------------
