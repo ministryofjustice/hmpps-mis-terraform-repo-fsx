@@ -1,9 +1,9 @@
 data "template_file" "instance_userdata" {
   count    = var.bfs_server_count
-  template = file("../userdata/userdata.txt")
+  template = file("../userdata/userdata.tpl")
 
   vars = {
-    host_name       = "${local.nart_prefix}${count.index + 1}-fsx"
+    host_name       = "${local.nart_prefix}${count.index + 1}-${random_string.random_hostname_suffix.result}"
     internal_domain = local.internal_domain
     user            = data.aws_ssm_parameter.user.value
     password        = data.aws_ssm_parameter.password.value
@@ -12,17 +12,23 @@ data "template_file" "instance_userdata" {
     ad_dns_ip_1     = local.ad_dns_ip_1
     ad_dns_ip_2     = local.ad_dns_ip_2
     ad_domain_name  = local.ad_domain_name
-    ad_admin_user_name = "Admin"
-    ad_admin_user_password = "aabbcc112233"
     bfs_filesystem_dns_name = local.bfs_filesystem_dns_name
   }
 }
-
 
 resource "null_resource" "userdatarenderdebug" {
   triggers = {
     json = data.template_file.instance_userdata[0].rendered
   }
+}
+
+resource "random_string" "random_hostname_suffix" {
+  length    = 3
+  lower     = true
+  min_lower = 3
+  upper     = false
+  special   = false
+  number    = false
 }
 
 # Iteratively create EC2 instances
@@ -53,7 +59,7 @@ resource "aws_instance" "bfs_server" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-${random_string.random_hostname_suffix.result}"
     },
     {
       "CreateSnapshot" = 0
@@ -70,7 +76,7 @@ resource "aws_instance" "bfs_server" {
   lifecycle {
     ignore_changes = [
       ami,
-      user_data,
+      # user_data,
     ]
   }
 }

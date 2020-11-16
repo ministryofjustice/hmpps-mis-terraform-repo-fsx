@@ -32,3 +32,12 @@ resource "aws_fsx_windows_file_system" "mis_bfs" {
   }
 
 }
+
+# ndl-bfs-101-fsx.delius-mis-dev.internal
+resource "aws_route53_record" "aws_fsx_windows_file_system" {
+  zone_id = local.public_zone_id
+  name    = "${local.bfs_filesystem_name}.${local.domain_name}"
+  type    = "CNAME"
+  ttl     = "300"
+  records = [aws_fsx_windows_file_system.mis_bfs.dns_name]
+}

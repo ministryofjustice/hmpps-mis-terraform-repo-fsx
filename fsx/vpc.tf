@@ -172,7 +172,7 @@ resource "aws_security_group_rule" "fsx_egress_to_ad_sg" {
   protocol                 = -1
   source_security_group_id = aws_security_group.mis-fsx.id
   security_group_id        = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
-  description              = "Allow ALL FSx traffic to Active Directory egress"
+  description              = "FSx traffic to Active Directory egress A"
 }
 
 # allow traffic from fsx security group to AD Security Group
@@ -183,29 +183,7 @@ resource "aws_security_group_rule" "fsx_ingress_from_ad_sg" {
   protocol                 = -1
   source_security_group_id = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
   security_group_id        = aws_security_group.mis-fsx.id
-  description              = "Allow ALL FSx traffic from Active Directory ingress"
-}
-
-# allow traffic internal traffic for fsx security group 
-resource "aws_security_group_rule" "fsx_ingress_internal" {
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
-  source_security_group_id = aws_security_group.mis-fsx.id
-  security_group_id        = aws_security_group.mis-fsx.id
-  description              = "Allow ALL FSx internal traffic"
-}
-
-# allow traffic internal traffic for fsx security group 
-resource "aws_security_group_rule" "fsx_egress_internal" {
-  type                     = "egress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
-  source_security_group_id = aws_security_group.mis-fsx.id
-  security_group_id        = aws_security_group.mis-fsx.id
-  description              = "Allow ALL FSx internal traffic"
+  description              = "Active Directory to FSx ingress B"
 }
 
 
@@ -217,16 +195,27 @@ resource "aws_security_group_rule" "ad_ingress_from_fsx_sg" {
   protocol                 = -1
   source_security_group_id = aws_security_group.mis-fsx.id
   security_group_id        = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
-  description              = "Allow ingress from FSx Security Group to AD Security Group"
+  description              = "Allow ingress from FSx Security Group to AD Security Group C"
 }
 
 # allow traffic internal traffic for fsx security group 
-resource "aws_security_group_rule" "ad_egress_to_fsx_sg" {
+resource "aws_security_group_rule" "fsx_ingress_internal" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = -1
+  source_security_group_id = aws_security_group.mis-fsx.id
+  security_group_id        = aws_security_group.mis-fsx.id
+  description              = "Allow ALL FSx internal traffic ingress E"
+}
+
+# allow traffic internal traffic for fsx security group 
+resource "aws_security_group_rule" "fsx_egress_internal" {
   type                     = "egress"
   from_port                = 0
   to_port                  = 0
   protocol                 = -1
-  source_security_group_id = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
+  source_security_group_id = aws_security_group.mis-fsx.id
   security_group_id        = aws_security_group.mis-fsx.id
-  description              = "Allow egress to FSx Security Group from AD Security Group"
+  description              = "Allow ALL FSx internal traffic egress J"
 }

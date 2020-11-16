@@ -33,3 +33,7 @@ output "ad_dns_ip_1" {
 output "ad_dns_ip_2" {
   value = local.ad_dns_ip_2
 }
+
+output "random_hostname_suffix" {
+  value = random_string.random_hostname_suffix.result
+}

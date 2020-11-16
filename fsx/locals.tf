@@ -3,8 +3,9 @@ locals {
   environment_identifier = data.terraform_remote_state.common.outputs.environment_identifier
   environment_name       = var.environment_name
   common_name            = "${local.environment_identifier}-${var.mis_app_name}"
-
-  bfs_filesystem_name = "mis-bfs"
+  public_zone_id         = data.terraform_remote_state.common.outputs.public_zone_id
+  private_zone_id        = data.terraform_remote_state.common.outputs.private_zone_id
+  bfs_filesystem_name    = "mis-bfs"
 
   vpc_id             = data.terraform_remote_state.common.outputs.vpc_id
   private_subnet_map = data.terraform_remote_state.common.outputs.private_subnet_map
@@ -28,9 +29,6 @@ locals {
   # preferred_subnet_id so it'll be the other one :o)
   secondary_subnet_id = local.private_subnet_ids[1]
 
-  # security group to allow BFS instances to access the FSx fileshare and AD
-  # nextcloud_samba_sg     = data.terraform_remote_state.network-security-groups.outputs.sg_mis_samba
 
-  # security group rule CIDR to allow BFS instance connectivity to AD & FSx filesystem
-  # ad_cidr_blocks         = ["0.0.0.0/0"]
+  domain_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
 }
