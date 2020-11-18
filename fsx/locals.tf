@@ -19,7 +19,8 @@ locals {
   environment_identifier = data.terraform_remote_state.common.outputs.environment_identifier
   environment_name       = var.environment_name
   common_name            = "${local.environment_identifier}-${var.mis_app_name}"
-  
+  bfs_filesystem_name    = "mis-bfs"
+
   # kms_key_id            = var.kms_key_id
   tags = merge(
     data.terraform_remote_state.vpc.outputs.tags,
