@@ -21,4 +21,3 @@ resource "aws_directory_service_directory" "mis_ad" {
     },
   )
 }
-
