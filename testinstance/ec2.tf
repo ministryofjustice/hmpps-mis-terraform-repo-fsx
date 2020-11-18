@@ -1,9 +1,9 @@
 data "template_file" "instance_userdata" {
   count    = var.bfs_server_count
-  template = file("../userdata/userdata.tpl")
+  template = file("./userdata/userdata.tpl")
 
   vars = {
-    host_name       = "${local.nart_prefix}${count.index + 1}-${random_string.random_hostname_suffix.result}"
+    host_name       = "${local.nart_prefix}${count.index + 1}-fsx"
     internal_domain = local.internal_domain
     user            = data.aws_ssm_parameter.user.value
     password        = data.aws_ssm_parameter.password.value
@@ -16,20 +16,7 @@ data "template_file" "instance_userdata" {
   }
 }
 
-resource "null_resource" "userdatarenderdebug" {
-  triggers = {
-    json = data.template_file.instance_userdata[0].rendered
-  }
-}
 
-resource "random_string" "random_hostname_suffix" {
-  length    = 3
-  lower     = true
-  min_lower = 3
-  upper     = false
-  special   = false
-  number    = false
-}
 
 # Iteratively create EC2 instances
 resource "aws_instance" "bfs_server" {
@@ -52,14 +39,14 @@ resource "aws_instance" "bfs_server" {
 
   volume_tags = merge(
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}"
+      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
     },
   )
 
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-${random_string.random_hostname_suffix.result}"
+      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
     },
     {
       "CreateSnapshot" = 0
