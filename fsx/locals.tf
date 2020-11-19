@@ -10,8 +10,8 @@ locals {
   # ================================================================================
   # Route53
   # ================================================================================
-  public_zone_id         = data.terraform_remote_state.common.outputs.public_zone_id
-  private_zone_id        = data.terraform_remote_state.common.outputs.private_zone_id
+  public_zone_id  = data.terraform_remote_state.common.outputs.public_zone_id
+  private_zone_id = data.terraform_remote_state.common.outputs.private_zone_id
 
   # ================================================================================
   # Common

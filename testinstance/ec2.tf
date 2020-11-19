@@ -3,15 +3,15 @@ data "template_file" "instance_userdata" {
   template = file("./userdata/userdata.tpl")
 
   vars = {
-    host_name       = "${local.nart_prefix}${count.index + 1}-fsx"
-    internal_domain = local.internal_domain
-    user            = data.aws_ssm_parameter.user.value
-    password        = data.aws_ssm_parameter.password.value
-    bosso_user      = data.aws_ssm_parameter.bosso_user.value
-    bosso_password  = data.aws_ssm_parameter.bosso_password.value
-    ad_dns_ip_1     = local.ad_dns_ip_1
-    ad_dns_ip_2     = local.ad_dns_ip_2
-    ad_domain_name  = local.ad_domain_name
+    host_name               = "${local.nart_prefix}${count.index + 1}-fsx"
+    internal_domain         = local.internal_domain
+    user                    = data.aws_ssm_parameter.user.value
+    password                = data.aws_ssm_parameter.password.value
+    bosso_user              = data.aws_ssm_parameter.bosso_user.value
+    bosso_password          = data.aws_ssm_parameter.bosso_password.value
+    ad_dns_ip_1             = local.ad_dns_ip_1
+    ad_dns_ip_2             = local.ad_dns_ip_2
+    ad_domain_name          = local.ad_domain_name
     bfs_filesystem_dns_name = local.bfs_filesystem_dns_name
   }
 }

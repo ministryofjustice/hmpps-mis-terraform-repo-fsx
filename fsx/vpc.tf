@@ -12,19 +12,19 @@ resource "aws_security_group" "mis-fsx" {
 
   # internal traffic
   ingress {
-      description = "ingress internal security group traffic"
-      from_port   = 0
-      to_port     = 0
-      protocol    = -1
-      self        = true
+    description = "ingress internal security group traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    self        = true
   }
 
   egress {
-      description = "egress internal security group traffic"
-      from_port   = 0
-      to_port     = 0
-      protocol    = -1
-      self        = true
+    description = "egress internal security group traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    self        = true
   }
 
   # DNS 

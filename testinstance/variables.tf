@@ -11,17 +11,17 @@ variable "environment_type" {
 
 variable "cloudwatch_log_retention" {
   description = "How ling to retain cloudwatch logs for BFS instances"
-  default = 7
+  default     = 7
 }
 
 variable "bfs_instance_type" {
   description = "Instance type for BFS instances"
-  default = "t2.xlarge"
+  default     = "t2.xlarge"
 }
 
 variable "bfs_root_size" {
   description = "BFS Instance root volume size in GiB"
-  default = "75"
+  default     = "75"
 }
 
 variable "bfs_server_count" {

@@ -13,13 +13,13 @@
 
 #   health_check_grace_period = 300
 #   health_check_type         = "ELB"
-  
+
 #   force_delete              = true
 #   vpc_zone_identifier       = local.private_subnet_map
 
 
 #   availability_zones = ["eu-west-2a"]
-  
+
 #   launch_template {
 #     id      = aws_launch_template.mis_bfs_server.id
 #     version = "$Latest"
