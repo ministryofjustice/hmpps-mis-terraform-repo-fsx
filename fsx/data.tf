@@ -46,3 +46,16 @@ data "terraform_remote_state" "activedirectory" {
     region = var.region
   }
 }
+
+#-------------------------------------------------------------
+### Getting the FSx Filesystem details (for security group)
+#-------------------------------------------------------------
+data "terraform_remote_state" "fsx-integration" {
+  backend = "s3"
+
+  config = {
+    bucket = var.remote_state_bucket_name
+    key    = "${var.environment_type}/fsx-integration/terraform.tfstate"
+    region = var.region
+  }
+}

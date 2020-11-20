@@ -48,4 +48,8 @@ locals {
   # Active Directory
   # ================================================================================
   domain_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
+
+
+
+  mis_fsx_integration_security_group = data.terraform_remote_state.fsx-integration.outputs.mis_fsx_integration_security_group
 }
