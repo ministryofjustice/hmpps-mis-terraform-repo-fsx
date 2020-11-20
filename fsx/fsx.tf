@@ -1,6 +1,7 @@
 # https://registry.terraform.io/providers/hashicorp/aws/2.70.0/docs/resources/fsx_windows_file_system
 
 resource "aws_fsx_windows_file_system" "mis_bfs" {
+
   active_directory_id               = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
   storage_capacity                  = 300
   throughput_capacity               = 64 # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
@@ -32,3 +33,4 @@ resource "aws_fsx_windows_file_system" "mis_bfs" {
   }
 
 }
+

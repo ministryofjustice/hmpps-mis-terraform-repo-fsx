@@ -32,11 +32,11 @@ locals {
   sg_outbound_id = data.terraform_remote_state.common.outputs.common_sg_outbound_id
 
   mis_ad_security_group_id = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
-  ad_dns_ip_1     = data.terraform_remote_state.activedirectory.outputs.mis_ad["dns_ip_addresses"][0]
-  ad_dns_ip_2     = data.terraform_remote_state.activedirectory.outputs.mis_ad["dns_ip_addresses"][1]
-  ad_domain_name  = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
+  ad_dns_ip_1              = data.terraform_remote_state.activedirectory.outputs.mis_ad["dns_ip_addresses"][0]
+  ad_dns_ip_2              = data.terraform_remote_state.activedirectory.outputs.mis_ad["dns_ip_addresses"][1]
+  ad_domain_name           = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
 
   mis_fsx_aws_security_group_id = data.terraform_remote_state.fsx.outputs.mis_bfs_filesystem["security_group_id"]
   bfs_filesystem_dns_name       = data.terraform_remote_state.fsx.outputs.mis_bfs_filesystem["dns_name"]
- 
+
 }
