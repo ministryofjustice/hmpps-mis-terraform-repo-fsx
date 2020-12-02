@@ -3,7 +3,7 @@ data "template_file" "instance_userdata" {
   template = file("./userdata/userdata.tpl")
 
   vars = {
-    host_name               = "${local.hostname}${count.index + 1}"
+    host_name               = "${local.nart_prefix}${count.index + 1}"
     internal_domain         = local.internal_domain
     user                    = data.aws_ssm_parameter.user.value
     password                = data.aws_ssm_parameter.password.value
@@ -16,13 +16,11 @@ data "template_file" "instance_userdata" {
   }
 }
 
-
 resource "null_resource" "userdata_rendered" {
   triggers = {
     json = data.template_file.instance_userdata[0].rendered
   }
 }
-
 
 # Iteratively create EC2 instances
 resource "aws_instance" "bfs_server" {
