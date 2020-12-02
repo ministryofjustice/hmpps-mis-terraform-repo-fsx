@@ -16,6 +16,14 @@ data "template_file" "instance_userdata" {
   }
 }
 
+
+resource "null_resource" "userdata_rendered" {
+  triggers = {
+    json = data.template_file.instance_userdata[0].rendered
+  }
+}
+
+
 # Iteratively create EC2 instances
 resource "aws_instance" "bfs_server" {
   count         = var.bfs_server_count
