@@ -25,7 +25,8 @@ locals {
   tags = merge(
     data.terraform_remote_state.vpc.outputs.tags,
     {
-      "sub-project" = var.mis_app_name
+      "sub-project" = var.mis_app_name,
+      "source-code" = "https://github.com/ministryofjustice/hmpps-mis-terraform-repo-fsx"
     }
   )
 

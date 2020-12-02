@@ -8,17 +8,28 @@ This is required as the AWS FSx implementation requires Terraform 13 AWS provide
 
 - hmpps-mis-terraform-repo is currently at Terraform 12 so rather than upgrade the whole repo I've moved this service out into its own repo until we upgrade to Terraform 13
 
-**Once hmpps-mis-terraform-repo is at Terraform 13 we can migrate the active-directory folder to hmpps-mis-terraform-repo and deprecate this repo**
+**Once hmpps-mis-terraform-repo is at Terraform 13 we can migrate the component folders to hmpps-mis-terraform-repo and deprecate this repo**
+
+- activedirectory - Creates the *.{environment_name}.local AD
+- fsx - creates the AWS FSx FileSystem
+- admininstance - Creates a utility Windows 2016 Admin Instance 
+- dns - creates AWS Route53 DNS Resolver to allow *.internal hosts to resolve *.local DNS entries for the AD added instances
+
 
 ## Environments
 
-**Dev**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/dev)
+**delius-mis-dev**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/dev)
 
-**Test**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/test)
+**delius-auto-dev**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/test)
 
-**Pre-prod**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/pre-prod)
+**delius-stage**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/stage)
 
-**Prod**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/prod)
+**delius-pre-prod**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/pre-prod)
+
+**delius-prod**: [readme](https://github.com/ministryofjustice/hmpps-mis-terraform-repo/tree/master/docs/prod)
+
+
+
 
 
 ## GitHub Actions

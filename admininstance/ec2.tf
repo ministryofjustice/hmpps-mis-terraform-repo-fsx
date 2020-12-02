@@ -3,7 +3,7 @@ data "template_file" "instance_userdata" {
   template = file("./userdata/userdata.tpl")
 
   vars = {
-    host_name               = "${local.nart_prefix}${count.index + 1}-fsx"
+    host_name               = "${local.hostname}${count.index + 1}"
     internal_domain         = local.internal_domain
     user                    = data.aws_ssm_parameter.user.value
     password                = data.aws_ssm_parameter.password.value
@@ -15,8 +15,6 @@ data "template_file" "instance_userdata" {
     bfs_filesystem_dns_name = local.bfs_filesystem_dns_name
   }
 }
-
-
 
 # Iteratively create EC2 instances
 resource "aws_instance" "bfs_server" {
@@ -39,14 +37,16 @@ resource "aws_instance" "bfs_server" {
 
   volume_tags = merge(
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      # "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      "Name" = "${local.hostname}${count.index + 1}"
     },
   )
 
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      # "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      "Name" = "${local.hostname}${count.index + 1}"
     },
     {
       "CreateSnapshot" = 0

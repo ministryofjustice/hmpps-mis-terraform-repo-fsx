@@ -24,7 +24,9 @@ Set-ItemProperty -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlo
 $MaxSize = (Get-PartitionSupportedSize -DriveLetter C).sizeMax
 Resize-Partition -DriveLetter C -Size $MaxSize
 
+# Install AD Client and DNS Client Tools
 Install-WindowsFeature RSAT-ADDS
+Install-WindowsFeature RSAT-DNS-Server
 
 # set DNS servers to AD servers so we can find FSx DNS entries
 $serverAddresses = Get-DNSClientServerAddress -InterfaceAlias Ether* -AddressFamily IPv4
@@ -103,6 +105,7 @@ $domaincreds = New-Object System.Management.Automation.PSCredential ($domainuser
 #    Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
 #    #Restart-Computer -Force
 #}
+
 
 # Now map the FSx filesystem (as we're now on the domain)
 # Windows 2016 Allows global mapping as 

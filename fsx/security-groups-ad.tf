@@ -4,15 +4,15 @@
 # AD Security Group Rules
 # ============================================
 
-resource "aws_security_group_rule" "ad_egress_all_internal" {
-  type                     = "egress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
-  security_group_id        = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
-  self                     = true
-  description              = "egress ALL security group internal traffic"
-}
+# resource "aws_security_group_rule" "ad_egress_all_internal" {
+#   type                     = "egress"
+#   from_port                = 0
+#   to_port                  = 0
+#   protocol                 = -1
+#   security_group_id        = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
+#   self                     = true
+#   description              = "egress ALL security group internal traffic"
+# }
 
 resource "aws_security_group_rule" "ad_egress_to_fsx_sg" {
   type                     = "egress"
