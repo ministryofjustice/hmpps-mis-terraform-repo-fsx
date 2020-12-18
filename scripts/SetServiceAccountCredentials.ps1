@@ -18,18 +18,26 @@ function SetServiceAccountCredentials {
     $svc_password_SSMPath = "/" + $EnvironmentName + "/" + $ApplicationName + "/mis-service-accounts/${ServiceAccountName}/${ServiceAccountName}_password"
     $svc_password_SSMPath
     
-    #$svc_username         = Get-SSMParameter -Name $svc_username_SSMPath -WithDecryption $true
-    #$svc_password         = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $true
-    #$svc_securepassword   = ConvertTo-SecureString $svc_password.Value -AsPlainText -Force
+    $svc_username       = Get-SSMParameter -Name $svc_username_SSMPath -WithDecryption $true
+    $svc_password       = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $true
+    $decryptedPassword  = $svc_password.Value
+    $svc_username_full  = "${domain_name}" + "\" + $svc_username.Value
     
-    $svc_username_full    = "${domain_name}" + "\" + $ad_admin_username.Value
-    
+    Write-Output "Stopping Service '${ServiceName}' with new credentials"
+    Stop-Service -Name $ServiceName -PassThru
+
     Write-Output "Setting Service '$ServiceName' to RunAs '$svc_username_full'"
-    #$svc_creds = New-Object System.Management.Automation.PSCredential ($svc_username_full, $svc_securepassword) 
-    #Set-Service -Name $ServiceName -Credential $credential
     
-    Write-Output "Restarting Service '${ServiceName}' with new credentials"
-    #Restart-Service -Name $ServiceName
+    $svc_Obj= Get-WmiObject Win32_Service -filter "name='$ServiceName'"
+    
+    $ChangeStatus = $svc_Obj.change($null,$null,$null,$null,$null,
+                          $null, $svc_username_full, "${decryptedPassword}" ,$null,$null,$null)
+    If ($ChangeStatus.ReturnValue -eq "0") {
+        Write-host "RunAs set sucessfully for the service '$Service' in $env:COMPUTERNAME"
+    } 
+
+    Write-Output "Starting Service '${ServiceName}' with new credentials"
+    Start-Service -Name $ServiceName -PassThru
 
 }
 
@@ -76,18 +84,11 @@ switch($hostname_suffix){
    'ndl-bcs' {
         SetServiceAccountCredentials -ServiceName 'BOEXI40SIACMSTIER101' -ServiceDescription 'Server Intelligence Agent (CMSTIER101)' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_BOSSO-NDL'
    }
-   'ndl-bfs' {
-        Write-Output "No service accounts to set for Hostname suffix ${hostname_suffix} "
-    }
-    'ndl-bps' {
+   'ndl-bps' {
         SetServiceAccountCredentials -ServiceName 'BOEXI40SIAPROCTIER101' -ServiceDescription 'Server Intelligence Agent (PROCTIER101)' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_BOSSO-NDL'
    }
-   'ndl-bws' {
-        Write-Output "No service accounts to set for Hostname suffix ${hostname_suffix} "
-    }
-    'ndl-dis' {
+   'ndl-dis' {
         SetServiceAccountCredentials -ServiceName 'DI_JOBSERVICE' -ServiceDescription 'SAP Data Services' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_DS_AD_DEV'
         SetServiceAccountCredentials -ServiceName 'BOEXI40SIANDLDIS101' -ServiceDescription 'Server Intelligence Agent (NDLDIS101)' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_DS_AD_DEV'
-    } 
-   
+   }
 }

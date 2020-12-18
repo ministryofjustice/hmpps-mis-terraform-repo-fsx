@@ -1,96 +1,81 @@
-function CreateADUser {
-    
-    param (
-        [string]$ADUserName,
-        [securestring]$ADUserPassword,
-        [string]$TeamName
+Import-Module ActiveDirectory
+
+Clear-Host
+
+Write-Output '================================================================'
+Write-Output ' Get environmentName, application variables from aws meta-data'
+Write-Output '================================================================'
+
+# Get the instance id from ec2 meta data
+$instanceid = Invoke-RestMethod "http://169.254.169.254/latest/meta-data/instance-id"
+
+# Get the environment name and application from this instance's environment-name and application tag values
+$environmentName = Get-EC2Tag -Filter @(
+        @{
+            name="resource-id"
+            values="$instanceid"
+        }
+        @{
+            name="key"
+            values="environment-name"
+        }
     )
-
-    write-output "---------------------------------------------------------------------------------"
-    write-output "--- Creating AD User $ADUserName ---"
-	
-    $AccountUserName         = "$ADUserName"
-    $AccountDisplayName      = "$ADUserName $TeamName User"
-    $Description             = "$TeamName User $ADUserName"
-   
-    New-ADUser -Name $AccountUserName -AccountPassword $ADUserPassword -DisplayName $AccountDisplayName -PasswordNeverExpires $true -Description $Description
-
-    write-output ""
-
-}
-
-function CreateADGroup {
-    
-    param (
-        [string]$GroupName
+$application = Get-EC2Tag -Filter @(
+        @{
+            name="resource-id"
+            values="$instanceid"
+        }
+        @{
+            name="key"
+            values="application"
+        }
     )
-
-    write-output "---------------------------------------------------------------------------------"
-    write-output "--- Creating AD Group $GroupName ---"
-	
-    New-ADGroup -Name $GroupName -GroupScope DomainLocal
-
-    write-output ""
-
-}
-
-function AddGroupMember {
-
-    param (
-        [string]$ChildName,
-        [string]$ParentGroupName
-    )
-
-    write-output "---------------------------------------------------------------------------------"
-    write-output "--- Adding $ChildName to Group $ParentGroupName ---"
-
-    #$Group = Get-ADGroup -Identity "CN=Administrators,OU=builtin,DC=delius-mis-dev,DC=local" 
-    $Group = Get-ADGroup -Identity $ParentGroupName 
-    Add-ADGroupMember -Identity $Group -Members $ChildName 
-}
-
-
-
-$SecureAccountPassword = "abcd1234&#&#*D"  | ConvertTo-SecureString -AsPlainText -Force
+$domain_name = "$($environmentName.Value).local"
 
 write-output '================================================================================'
-write-output " Creating AD Users for Admin Team.."
+write-output " Creating Service Account SVC_BOSSO-NDL"
 write-output '================================================================================'
-$GroupNames = @('hmpps-admin-users','hmpps-mis-users')
 
-foreach ($group in $GroupNames) {
-Write-Output "Creating AD group $group for Admin Team.."
-   CreateADGroup $group 
-   AddGroupMember $group
-}
+$svc_username_SSMPath = "/" + $environmentName.Value + "/" + $application.Value + "/mis-service-accounts/SVC_BOSSO-NDL/SVC_BOSSO-NDL_username"
+$svc_password_SSMPath = "/" + $environmentName.Value + "/" + $application.Value + "/mis-service-accounts/SVC_BOSSO-NDL/SVC_BOSSO-NDL_password"
 
+Write-Output "Getting the Service Username from ${svc_username_SSMPath}"    
+$svc_username = Get-SSMParameter -Name $svc_username_SSMPath -WithDecryption $true
 
+Write-Output "Getting the Service Password from ${svc_password_SSMPath}"
+$svc_password = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $true
 
-write-output '================================================================================'
-write-output " Creating AD Users for Admin Team.."
-write-output '================================================================================'
-$AdminUsers      = @('ChrisKinsella','SteveJames')
-$AdminTeamGroups = @("CN=AWS Delegated Administrators,OU=AWS Delegated Groups,DC=delius-mis-dev,DC=local")
+$ServiceUsername = $svc_username.Value
 
-foreach ($user in $AdminUsers) {
-   
-   #CreateADUser  $user $SecureAccountPassword "Admin Team"
+$OUPath = "OU=Users,OU=delius-mis-dev,DC=delius-mis-dev,DC=local"
+Write-Output "Creating the user ${ServiceUsername} in '${OUPath}'"
+$SecureAccountPassword = $svc_password.Value | ConvertTo-SecureString -AsPlainText -Force
+New-ADUser -Name $ServiceUsername -GivenName $ServiceUsername -Surname "" -Path $OUPath -AccountPassword $SecureAccountPassword -Enabled $true
 
-   foreach ($group in $AdminTeamGroups) {
-       AddGroupMember $user $group
-   }
-}
+Write-Output "Checking the AD for the newly created user ${ServiceUsername}"
+Get-ADUser -Filter * -Properties samAccountName | Where { $_.samAccountName -eq $ServiceUsername } | select samAccountName, DistinguishedName
+
+$ServiceUsername = ""
 
 write-output '================================================================================'
-write-output " Creating AD Users for MIS Team.."
+write-output " Creating Service Account SVC_DS_AD_DEV"
 write-output '================================================================================'
-$MISTeamUsers  = @('RamaKotha','RaghavPalthur', 'RajuRangasamy', 'PraveenMaddini')
-$MISTeamGroups = @("hmpps-mis-users")
 
-foreach ($user in $MISTeamUsers) {
-#   CreateADUser  $user $SecureAccountPassword "MIS Team"
+$svc_username_SSMPath = "/" + $environmentName.Value + "/" + $application.Value + "/mis-service-accounts/SVC_DS_AD_DEV/SVC_DS_AD_DEV_username"
+$svc_password_SSMPath = "/" + $environmentName.Value + "/" + $application.Value + "/mis-service-accounts/SVC_DS_AD_DEV/SVC_DS_AD_DEV_password"
 
-   foreach ($group in $MISTeamGroups) {
-       AddGroupMember $user $group
-   }
-}
+Write-Output "Getting the Service Username from ${svc_username_SSMPath}"    
+$svc_username = Get-SSMParameter -Name $svc_username_SSMPath -WithDecryption $true
+
+Write-Output "Getting the Service Password from ${svc_password_SSMPath}"
+$svc_password = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $true
+
+$ServiceUsername = $svc_username.Value
+
+$OUPath = "OU=Users,OU=delius-mis-dev,DC=delius-mis-dev,DC=local"
+Write-Output "Creating the user ${ServiceUsername} in '${OUPath}'"
+$SecureAccountPassword = $svc_password.Value | ConvertTo-SecureString -AsPlainText -Force
+New-ADUser -Name $ServiceUsername -GivenName $ServiceUsername -Surname "" -Path $OUPath -AccountPassword $SecureAccountPassword -Enabled $true
+
+Write-Output "Checking the AD for the newly created user ${ServiceUsername}"
+Get-ADUser -Filter * -Properties samAccountName | Where { $_.samAccountName -eq $ServiceUsername } | select samAccountName, DistinguishedName
