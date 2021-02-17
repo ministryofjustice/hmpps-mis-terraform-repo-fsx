@@ -3,15 +3,15 @@
 resource "aws_fsx_windows_file_system" "mis_bfs" {
 
   active_directory_id               = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
-  storage_capacity                  = 300
-  throughput_capacity               = 64 # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
+  storage_capacity                  = local.storage_capacity
+  throughput_capacity               = local.throughput_capacity
   subnet_ids                        = local.subnet_ids
   preferred_subnet_id               = local.preferred_subnet_id
-  automatic_backup_retention_days   = 7 # Minimum of 0 and maximum of 90. Defaults to 7. Set to 0 to disable.
-  copy_tags_to_backups              = true
-  daily_automatic_backup_start_time = "06:00"
+  automatic_backup_retention_days   = local.automatic_backup_retention_days
+  copy_tags_to_backups              = local.copy_tags_to_backups
+  daily_automatic_backup_start_time = local.daily_automatic_backup_start_time
   security_group_ids                = [aws_security_group.mis-fsx.id]
-  deployment_type                   = "MULTI_AZ_1"
+  deployment_type                   = local.deployment_type
 
   tags = merge(
     local.tags,

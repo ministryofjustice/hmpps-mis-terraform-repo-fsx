@@ -19,6 +19,15 @@ output "mis_bfs_filesystem" {
     preferred_subnet_id            = local.preferred_subnet_id
     secondary_subnet_id            = local.secondary_subnet_id
     security_group_id              = aws_security_group.mis-fsx.id
+    storage_capacity               = local.storage_capacity
+    storage_type                   = local.storage_type
+    throughput_capacity            = local.throughput_capacity
+    tags                           = local.tags
+    deployment_type                = local.deployment_type
+    weekly_maintenance_start_time  = local.weekly_maintenance_start_time
+    daily_automatic_backup_start_time = local.daily_automatic_backup_start_time
+    automatic_backup_retention_days = local.automatic_backup_retention_days
+    aliases                         = local.aliases
   }
 }
 

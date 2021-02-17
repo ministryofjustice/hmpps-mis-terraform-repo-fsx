@@ -21,9 +21,10 @@ function SetServiceAccountCredentials {
     $svc_username       = Get-SSMParameter -Name $svc_username_SSMPath -WithDecryption $true
     $svc_password       = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $true
     $decryptedPassword  = $svc_password.Value
+    Write-Output "Password '${decryptedPassword}'"
     $svc_username_full  = "${domain_name}" + "\" + $svc_username.Value
     
-    Write-Output "Stopping Service '${ServiceName}' with new credentials"
+    Write-Output "Stopping Service '${ServiceName}' to set new credentials"
     Stop-Service -Name $ServiceName -PassThru
 
     Write-Output "Setting Service '$ServiceName' to RunAs '$svc_username_full'"
@@ -31,9 +32,9 @@ function SetServiceAccountCredentials {
     $svc_Obj= Get-WmiObject Win32_Service -filter "name='$ServiceName'"
     
     $ChangeStatus = $svc_Obj.change($null,$null,$null,$null,$null,
-                          $null, $svc_username_full, "${decryptedPassword}" ,$null,$null,$null)
+                          $null, $svc_username_full, $decryptedPassword ,$null,$null,$null)
     If ($ChangeStatus.ReturnValue -eq "0") {
-        Write-host "RunAs set sucessfully for the service '$Service' in $env:COMPUTERNAME"
+        Write-host "RunAs set sucessfully for the service '$ServiceName' in $env:COMPUTERNAME"
     } 
 
     Write-Output "Starting Service '${ServiceName}' with new credentials"
@@ -91,4 +92,8 @@ switch($hostname_suffix){
         SetServiceAccountCredentials -ServiceName 'DI_JOBSERVICE' -ServiceDescription 'SAP Data Services' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_DS_AD_DEV'
         SetServiceAccountCredentials -ServiceName 'BOEXI40SIANDLDIS101' -ServiceDescription 'Server Intelligence Agent (NDLDIS101)' -EnvironmentName $environmentName.Value -ApplicationName $application.Value -ServiceAccountName 'SVC_DS_AD_DEV'
    }
+   'ndl-bws' {
+        Write-Output "No Services to update for hostname ndl-bws"
+   }
 }
+
