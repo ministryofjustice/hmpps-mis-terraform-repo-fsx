@@ -80,10 +80,10 @@ Grant-FSxSmbShareAccess -Name 'share' -AccountName 'NT AUTHORITY\SYSTEM' -Access
 # delius-mis-dev\AWS Delegated Administrators
 Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\AWS Delegated Administrators"  -AccessRight Full -Force
 
-# delius-mis-dev\SVC_DS_AD_DEV_100
+# delius-mis-dev\SVC_DS_AD_DEV
 Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\${SVC_DS_AD_DEV_UserName}" -AccessRight Full -Force
 
-# delius-mis-dev\SVC_BOSSO-NDL-101
+# delius-mis-dev\SVC_BOSSO-NDL
 Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\${SVC_BOSSO_NDL_Username}" -AccessRight Full -Force
 
 # everyone

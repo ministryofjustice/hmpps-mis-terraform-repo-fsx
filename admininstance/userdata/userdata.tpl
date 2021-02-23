@@ -1,4 +1,10 @@
 <powershell>
+
+Import-Module Carbon
+
+Invoke-WebRequest https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe -OutFile $env:USERPROFILE\Desktop\SSMAgent_latest.exe
+Start-Process -FilePath $env:USERPROFILE\Desktop\SSMAgent_latest.exe -ArgumentList "/S"
+
 $misCreds = New-Credential -UserName "${user}" -Password "${password}"
 Install-User -Credential $misCreds
 Add-GroupMember -Name Administrators -Member ${user}
@@ -110,8 +116,8 @@ $domaincreds = New-Object System.Management.Automation.PSCredential ($domainuser
 # Now map the FSx filesystem (as we're now on the domain)
 # Windows 2016 Allows global mapping as 
 # see https://medium.com/@bberkayilmaz/mounting-aws-fsx-with-autoscaling-in-terraform-eee3d115d49c - scenario 3
-New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Persistent $true -Credential $domaincreds -LocalPath D:
-Get-SmbGlobalMapping 
+#New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Persistent $true -Credential $domaincreds -LocalPath D:
+#Get-SmbGlobalMapping 
 
 </powershell>
 <persist>true</persist>

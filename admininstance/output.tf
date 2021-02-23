@@ -1,29 +1,29 @@
 # primary ec2
-output "bfs_instance_ids" {
-  value = aws_instance.bfs_server.*.id
+output "admin_instance_ids" {
+  value = aws_instance.admin_server.*.id
 }
 
-output "bfs_private_ips" {
-  value = aws_instance.bfs_server.*.private_ip
+output "admin_private_ips" {
+  value = aws_instance.admin_server.*.private_ip
 }
 
 # dns
-output "bfs_primary_dns" {
-  value = aws_route53_record.bfs_dns.*.fqdn
+output "admin_primary_dns" {
+  value = aws_route53_record.admin_dns.*.fqdn
 }
 
-output "bfs_primary_dns_ext" {
-  value = aws_route53_record.bfs_dns.*.fqdn
+output "admin_primary_dns_ext" {
+  value = aws_route53_record.admin_dns.*.fqdn
 }
 
-#bfs ami_id
-output "bfs_ami_id" {
-  value = aws_instance.bfs_server.*.ami
+#admin ami_id
+output "admin_ami_id" {
+  value = aws_instance.admin_server.*.ami
 }
 
-#bfs instance_type
-output "bfs_instance_type" {
-  value = aws_instance.bfs_server.*.instance_type
+#admin instance_type
+output "admin_instance_type" {
+  value = aws_instance.admin_server.*.instance_type
 }
 
 
