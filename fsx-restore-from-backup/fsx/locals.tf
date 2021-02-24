@@ -62,5 +62,5 @@ locals {
   deployment_type                   = "MULTI_AZ_1"
 
   weekly_maintenance_start_time  = "2:02:30"
-  aliases                        = local.common_name
+  aliases                        = "${local.common_name}"
 }

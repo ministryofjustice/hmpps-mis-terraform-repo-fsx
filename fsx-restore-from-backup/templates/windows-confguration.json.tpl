@@ -2,7 +2,6 @@
   "ActiveDirectoryId": "${ActiveDirectoryId}",
   "SelfManagedActiveDirectoryConfiguration": {
     "DomainName": "${DomainName}",
-    "OrganizationalUnitDistinguishedName": "${OrganizationalUnitDistinguishedName}",
     "UserName": "${UserName}",
     "Password": "${Password}",
     "DnsIps": ["${PrimaryDNSIP}", "${SecondaryDNSIP}"]

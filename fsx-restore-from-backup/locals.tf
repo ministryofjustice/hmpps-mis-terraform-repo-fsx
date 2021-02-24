@@ -34,6 +34,8 @@ locals {
 #   "vpc_id" = "vpc-0b4fc90ab0de60764"
 # }
 
+  # set this to the backupid we wish to restore
+  FSxBackupId   = "aaaaddd"
 
   filesystem_name     = data.terraform_remote_state.fsx.outputs.mis_bfs_filesystem["name"]
   
@@ -55,16 +57,11 @@ locals {
   ad_id       = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
   domain_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
   domain_short_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_short_name"]
-  
+   
   dns_ip_addresses = data.terraform_remote_state.activedirectory.outputs.mis_ad_dns_ip_addresses
   dns_ip_primary   = local.dns_ip_addresses[0]
   dns_ip_secondary = local.dns_ip_addresses[1]
 
   aliases = "${local.filesystem_name}.${local.domain_name}"
 
-  organizational_unit_distinguished_name = "OU=FSx,DC=delius-mis-dev,DC=local"
-
-  username = ""
-  password = ""
-    
 }

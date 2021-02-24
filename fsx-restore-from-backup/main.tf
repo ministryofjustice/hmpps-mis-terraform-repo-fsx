@@ -2,13 +2,13 @@ data "template_file" "create_script" {
   template = file("./templates/create-file-system-from-backup.sh.tpl")
 
   vars = {
-    BACKUPID             = "BACKUPID",
+    BACKUPID             = local.FSxBackupId,
     CLIENTREQUESTTOKEN   = "CLIENTREQUESTTOKEN",
     PRIMARYSUBNETID      = local.preferred_subnet_id,
     SECONDARYSUBNETID    = local.secondary_subnet_id,
     SECURITYGROUPID      = local.security_group_id,
     TAGS                 = jsonencode(local.tags),
-    WINDOWSCONFIGURATION = "WINDOWSCONFIGURATION",
+    WINDOWSCONFIGURATION = jsonencode(data.template_file.windows_confguration_json.rendered),
     STORAGETYPE          = local.storage_type
   }
 }
@@ -41,8 +41,8 @@ data "template_file" "windows_confguration_json" {
     DomainName        = local.domain_name,
     OrganizationalUnitDistinguishedName = "OrganizationalUnitDistinguishedName",
     FileSystemAdministratorsGroup = "FileSystemAdministratorsGroup",
-    UserName = "UserName",
-    Password = "Password",
+    UserName = "${local.domain_name}\\${data.aws_ssm_parameter.ad_admin_username.value}"
+    Password = data.aws_ssm_parameter.ad_admin_password.value
     PrimaryDNSIP = local.dns_ip_primary,
     SecondaryDNSIP = local.dns_ip_secondary,
     PreferredSubnetId  = local.preferred_subnet_id,
@@ -60,3 +60,4 @@ resource "null_resource" "windows_confguration_json" {
     json = data.template_file.windows_confguration_json.rendered
   }
 }
+
