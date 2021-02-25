@@ -32,15 +32,22 @@ $ad_admin_username = Get-SSMParameter -Name $ad_admin_username_SSMPath -WithDecr
 $ad_admin_password = Get-SSMParameter -Name $ad_admin_password_SSMPath -WithDecryption $true
 $secpasswd = ConvertTo-SecureString $ad_admin_password.Value -AsPlainText -Force
 
-$domainusername = "${ad_domain_name}" + "\" + $ad_admin_username.Value
+$domainname="$($environmentName.Value).local"
+Write-Output "DomainName: $domainname"
+
+$domainusername = "${domainname}" + "\" + $ad_admin_username.Value
 $domainusername
 $domaincreds = New-Object System.Management.Automation.PSCredential ($domainusername, $secpasswd) 
 
 # Now add the computer to the domain if its not already in the domain
-$domain=(Get-WmiObject win32_computersystem).Domain
-Write-Host $domain
+$currentDomain=(Get-WmiObject win32_computersystem).Domain
+Write-Host "CurrentDomain: $currentDomain"
 
-if( $domain -eq "WORKGROUP") {
-   Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
-   Restart-Computer -Force
+if( $currentDomain -eq "WORKGROUP") {
+    Write-Output "Current Domain is WORKGROUP so adding instance to domain"
+    Add-Computer -DomainName "${domainname}" -Credential $domaincreds
+    # Restart-Computer -Force
+}
+else {
+    Write-Output "Current Domain is ${currentDomain} so looks like this instance is already added to domain"
 }
