@@ -86,3 +86,5 @@ monitoring/files/*
 
 
 **/scratchpad
+
+*.code-workspace

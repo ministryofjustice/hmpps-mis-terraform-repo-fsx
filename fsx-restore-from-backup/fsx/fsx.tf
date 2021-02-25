@@ -8,7 +8,7 @@ resource "aws_fsx_windows_file_system" "mis_bfs" {
   subnet_ids                        = local.subnet_ids
   preferred_subnet_id               = local.preferred_subnet_id
   automatic_backup_retention_days   = local.automatic_backup_retention_days
-  copy_tags_to_backups              = "false" #local.copy_tags_to_backups
+  copy_tags_to_backups              = local.copy_tags_to_backups
   daily_automatic_backup_start_time = local.daily_automatic_backup_start_time
   security_group_ids                = [aws_security_group.mis-fsx.id]
   deployment_type                   = local.deployment_type
@@ -17,7 +17,7 @@ resource "aws_fsx_windows_file_system" "mis_bfs" {
     local.tags,
     {
       "Name" = local.bfs_filesystem_name
-    }
+    },
   )
 
   # kms_key_id  = local.kms_key_id

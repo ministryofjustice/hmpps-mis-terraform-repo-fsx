@@ -1,9 +1,9 @@
 data "template_file" "instance_userdata" {
-  count    = var.bfs_server_count
+  count    = local.admin_server_count
   template = file("./userdata/userdata.tpl")
 
   vars = {
-    host_name               = "${local.nart_prefix}${count.index + 1}-fsx"
+    host_name               = "${local.nart_prefix}${count.index + 1}"
     internal_domain         = local.internal_domain
     user                    = data.aws_ssm_parameter.user.value
     password                = data.aws_ssm_parameter.password.value
@@ -16,13 +16,17 @@ data "template_file" "instance_userdata" {
   }
 }
 
-
+resource "null_resource" "userdata_rendered" {
+  triggers = {
+    json = data.template_file.instance_userdata[0].rendered
+  }
+}
 
 # Iteratively create EC2 instances
-resource "aws_instance" "bfs_server" {
-  count         = var.bfs_server_count
-  ami           = data.aws_ami.amazon_ami.id
-  instance_type = var.bfs_instance_type
+resource "aws_instance" "admin_server" {
+  count         = local.admin_server_count
+  ami           = local.admin_instance_ami #data.aws_ami.amazon_ami.id
+  instance_type = local.admin_instance_type
 
   # element() function wraps if index > list count, so we get an even distribution across AZ subnets
   subnet_id                   = element(values(local.private_subnet_map), count.index)
@@ -39,14 +43,16 @@ resource "aws_instance" "bfs_server" {
 
   volume_tags = merge(
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      # "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      "Name" = "${local.hostname}${count.index + 1}"
     },
   )
 
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      # "Name" = "${local.environment_identifier}-${local.app_name}-${local.nart_prefix}${count.index + 1}-fsx"
+      "Name" = "${local.hostname}${count.index + 1}"
     },
     {
       "CreateSnapshot" = 0
@@ -54,15 +60,22 @@ resource "aws_instance" "bfs_server" {
   )
 
   monitoring = true
+  
+  root_block_device {
+    volume_size = local.admin_root_size
+  }
+
   user_data  = element(data.template_file.instance_userdata.*.rendered, count.index)
 
-  root_block_device {
-    volume_size = var.bfs_root_size
-  }
+  # Copies the scripts/* to admin instance
+  # provisioner "file" {
+  #   source      = "../scripts"
+  #   destination = "C:\\Setup"
+  # }
 
   lifecycle {
     ignore_changes = [
-      ami,
+      #ami,
       # user_data,
     ]
   }

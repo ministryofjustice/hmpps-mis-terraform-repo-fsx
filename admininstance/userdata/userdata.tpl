@@ -1,4 +1,21 @@
 <powershell>
+
+# Install Chocolatey & Carbon
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$ChocoInstallPath = "$env:SystemDrive\ProgramData\Chocolatey\bin"
+$ErrorActionPreference = "Stop"
+$VerbosePreference="Continue"
+
+if (!(Test-Path $ChocoInstallPath)) {
+    iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+}
+choco install carbon -y --version 2.9.2
+
+Import-Module Carbon
+
+Invoke-WebRequest https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe -OutFile $env:USERPROFILE\Desktop\SSMAgent_latest.exe
+Start-Process -FilePath $env:USERPROFILE\Desktop\SSMAgent_latest.exe -ArgumentList "/S"
+
 $misCreds = New-Credential -UserName "${user}" -Password "${password}"
 Install-User -Credential $misCreds
 Add-GroupMember -Name Administrators -Member ${user}
@@ -24,7 +41,9 @@ Set-ItemProperty -path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlo
 $MaxSize = (Get-PartitionSupportedSize -DriveLetter C).sizeMax
 Resize-Partition -DriveLetter C -Size $MaxSize
 
+# Install AD Client and DNS Client Tools
 Install-WindowsFeature RSAT-ADDS
+Install-WindowsFeature RSAT-DNS-Server
 
 # set DNS servers to AD servers so we can find FSx DNS entries
 $serverAddresses = Get-DNSClientServerAddress -InterfaceAlias Ether* -AddressFamily IPv4
@@ -71,44 +90,45 @@ $domainusername
 $domaincreds = New-Object System.Management.Automation.PSCredential ($domainusername, $secpasswd) 
 
 # Now add the computer to the domain if its not already in the domain
-#$domain=(Get-WmiObject win32_computersystem).Domain
-#Write-Host $domain
+$domain=(Get-WmiObject win32_computersystem).Domain
+Write-Host $domain
 
-#if( $domain -eq "WORKGROUP") {
-#    Try {
-#        write-host "Adding Computer to AD"
-#        Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
-#    }
-#    Catch {
-#        # show any errors, will error if no AD Account found for Computer
-#        $_
-#        #if computer is in AD we remove it.
-#        #Get-ADComputer -Identity $env:COMPUTERNAME -Credential $domaincreds | Remove-ADComputer
-#
-#        $ldapfilter= "(name=*" + $env:ComputerName + "*)"
-#        write-host "ldapfilter: $ldapfilter"
-#
-#        $searchbase = "OU=Computers,OU=" + $environmentName.Value + ",DC=" + $environmentName.Value + ",DC=internal"
-#        write-host "searchbase: $searchbase"
-#
-#        Get-ADComputer -LDAPFilter "$ldapfilter" -SearchBase "$searchbase" -Server ${ad_dns_ip_1} -Credential $domaincreds 
-#
-#    }
-#    Finally {
-#        #Restart-Computer -Force
-#    } 
-#}
+if( $domain -eq "WORKGROUP") {
+    Try {
+        write-host "Adding Computer to AD"
+        Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
+    }
+    Catch {
+        # show any errors, will error if no AD Account found for Computer
+        $_
+        #if computer is in AD we remove it.
+        #Get-ADComputer -Identity $env:COMPUTERNAME -Credential $domaincreds | Remove-ADComputer
+
+        $ldapfilter= "(name=*" + $env:ComputerName + "*)"
+        write-host "ldapfilter: $ldapfilter"
+
+        $searchbase = "OU=Computers,OU=" + $environmentName.Value + ",DC=" + $environmentName.Value + ",DC=internal"
+        write-host "searchbase: $searchbase"
+
+        Get-ADComputer -LDAPFilter "$ldapfilter" -SearchBase "$searchbase" -Server ${ad_dns_ip_1} -Credential $domaincreds 
+
+    }
+    Finally {
+        #Restart-Computer -Force
+    } 
+}
 
 #if( $domain -eq "WORKGROUP") {
 #    Add-Computer -DomainName "${ad_domain_name}" -Credential $domaincreds
 #    #Restart-Computer -Force
 #}
 
+
 # Now map the FSx filesystem (as we're now on the domain)
 # Windows 2016 Allows global mapping as 
 # see https://medium.com/@bberkayilmaz/mounting-aws-fsx-with-autoscaling-in-terraform-eee3d115d49c - scenario 3
-New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Persistent $true -Credential $domaincreds -LocalPath D:
-Get-SmbGlobalMapping 
+#New-SmbGlobalMapping -RemotePath "\\${bfs_filesystem_dns_name}\share" -Persistent $true -Credential $domaincreds -LocalPath D:
+#Get-SmbGlobalMapping 
 
 </powershell>
 <persist>true</persist>
