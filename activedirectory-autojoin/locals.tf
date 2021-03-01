@@ -1,29 +1,28 @@
 locals {
-  internal_domain              = data.terraform_remote_state.common.outputs.internal_domain
-  private_zone_id              = data.terraform_remote_state.common.outputs.private_zone_id
-  external_domain              = data.terraform_remote_state.common.outputs.external_domain
-  public_zone_id               = data.terraform_remote_state.common.outputs.public_zone_id
-  environment_identifier       = data.terraform_remote_state.common.outputs.environment_identifier
+  internal_domain        = data.terraform_remote_state.common.outputs.internal_domain
+  private_zone_id        = data.terraform_remote_state.common.outputs.private_zone_id
+  external_domain        = data.terraform_remote_state.common.outputs.external_domain
+  public_zone_id         = data.terraform_remote_state.common.outputs.public_zone_id
+  environment_identifier = data.terraform_remote_state.common.outputs.environment_identifier
 
-  environment_name = var.environment_name
-  region                       = var.region
-  app_name                     = data.terraform_remote_state.common.outputs.mis_app_name
-  private_subnet_map           = data.terraform_remote_state.common.outputs.private_subnet_map
-  nextcloud_samba_sg           = data.terraform_remote_state.network-security-groups.outputs.sg_mis_samba
+  environment_name   = var.environment_name
+  region             = var.region
+  app_name           = data.terraform_remote_state.common.outputs.mis_app_name
+  private_subnet_map = data.terraform_remote_state.common.outputs.private_subnet_map
+  nextcloud_samba_sg = data.terraform_remote_state.network-security-groups.outputs.sg_mis_samba
 
-  sg_map_ids         = data.terraform_remote_state.security-groups.outputs.sg_map_ids
-  instance_profile   = data.terraform_remote_state.iam.outputs.iam_policy_int_app_instance_profile_name
-  ssh_deployer_key   = data.terraform_remote_state.common.outputs.common_ssh_deployer_key
-  nart_role          = "ndl-tst-${data.terraform_remote_state.common.outputs.legacy_environment_name}"
+  sg_map_ids       = data.terraform_remote_state.security-groups.outputs.sg_map_ids
+  instance_profile = data.terraform_remote_state.iam.outputs.iam_policy_int_app_instance_profile_name
+  ssh_deployer_key = data.terraform_remote_state.common.outputs.common_ssh_deployer_key
+  nart_role        = "ndl-tst-${data.terraform_remote_state.common.outputs.legacy_environment_name}"
 
   # Create a prefix that removes the final integer from the nart_role value
-  nart_prefix    = substr(local.nart_role, 0, length(local.nart_role) - 1)
+  nart_prefix = substr(local.nart_role, 0, length(local.nart_role) - 1)
 
   test_server_count  = 2
   test_instance_type = "t2.large"
   test_instance_ami  = "ami-023b643326f4d6eff"
   test_root_size     = 50
-  #test_hostname      = "mistest001"
 
   sg_outbound_id = data.terraform_remote_state.common.outputs.common_sg_outbound_id
 

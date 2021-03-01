@@ -3,16 +3,15 @@ data "template_file" "instance_userdata" {
   template = file("./userdata/userdata.tpl")
 
   vars = {
-    #host_name               = local.test_hostname
-    internal_domain         = local.internal_domain
-    user                    = data.aws_ssm_parameter.user.value
-    password                = data.aws_ssm_parameter.password.value
-    bosso_user              = data.aws_ssm_parameter.bosso_user.value
-    bosso_password          = data.aws_ssm_parameter.bosso_password.value
-    ad_dns_ip_1             = local.ad_dns_ip_1
-    ad_dns_ip_2             = local.ad_dns_ip_2
-    ad_domain_name          = local.ad_domain_name
-    bfs_filesystem_dns_name = local.bfs_filesystem_dns_name
+    internal_domain          = local.internal_domain
+    user                     = data.aws_ssm_parameter.user.value
+    password                 = data.aws_ssm_parameter.password.value
+    bosso_user               = data.aws_ssm_parameter.bosso_user.value
+    bosso_password           = data.aws_ssm_parameter.bosso_password.value
+    ad_dns_ip_1              = local.ad_dns_ip_1
+    ad_dns_ip_2              = local.ad_dns_ip_2
+    ad_domain_name           = local.ad_domain_name
+    bfs_filesystem_dns_name  = local.bfs_filesystem_dns_name
     ssm_adjoin_document_name = local.ssm_adjoin_document_name
   }
 }
@@ -59,12 +58,12 @@ resource "aws_instance" "test_server" {
   )
 
   monitoring = true
-  
+
   root_block_device {
     volume_size = 50
   }
 
-  user_data  = element(data.template_file.instance_userdata.*.rendered, count.index)
+  user_data = element(data.template_file.instance_userdata.*.rendered, count.index)
 
   lifecycle {
     ignore_changes = [
