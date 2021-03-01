@@ -1,6 +1,7 @@
 
 output "awsconfig_Domain_document" {
   value = {
+    name = aws_ssm_document.awsconfig_domain_document.name
     created_date = aws_ssm_document.awsconfig_domain_document.created_date
     description  = aws_ssm_document.awsconfig_domain_document.description
     schema_version  = aws_ssm_document.awsconfig_domain_document.schema_version
