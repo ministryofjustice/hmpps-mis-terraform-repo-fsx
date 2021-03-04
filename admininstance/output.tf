@@ -23,7 +23,7 @@ output "admin_ami_id" {
 
 #admin instance_type
 output "admin_instance_type" {
-  value = aws_instance.admin_server.*.instance_type
+  value = local.admin_instance_type
 }
 
 

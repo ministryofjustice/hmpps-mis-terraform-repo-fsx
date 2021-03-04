@@ -75,8 +75,9 @@ resource "aws_instance" "admin_server" {
 
   lifecycle {
     ignore_changes = [
-      #ami,
-      # user_data,
+      ami,
+      user_data,
+      instance_type
     ]
   }
 }
