@@ -4,7 +4,7 @@
             "type": "metric",
             "x": 0,
             "y": 0,
-            "width": 6,
+            "width": 12,
             "height": 6,
             "properties": {
                 "title": "Free storage capacity",
@@ -13,7 +13,7 @@
                 "stacked": false,
                 "stat": "Sum",
                 "metrics": [
-                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
+                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "fs-0e5b870b42089908b", { "id": "m1", "visible": false } ],
                     [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)*60", "label": "Free storage capacity" } ]
                 ],
                 "region": "${region}"
@@ -21,9 +21,9 @@
         },
         {
             "type": "metric",
-            "x": 6,
+            "x": 12,
             "y": 0,
-            "width": 6,
+            "width": 12,
             "height": 6,
             "properties": {
                 "title": "Total IOPS (operations/sec)",
@@ -32,7 +32,7 @@
                 "stacked": false,
                 "stat": "Sum",
                 "metrics": [
-                    [ "AWS/FSx", "DataReadOperations", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
+                    [ "AWS/FSx", "DataReadOperations", "FileSystemId", "fs-0e5b870b42089908b", { "id": "m1", "visible": false } ],
                     [ ".", "DataWriteOperations", ".", ".", { "id": "m2", "visible": false } ],
                     [ ".", "MetadataOperations", ".", ".", { "id": "m3", "visible": false } ],
                     [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)", "label": "Total IOPS" } ]
@@ -42,13 +42,13 @@
         },
         {
             "type": "metric",
-            "x": 12,
-            "y": 0,
-            "width": 6,
+            "x": 0,
+            "y": 6,
+            "width": 12,
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/FSx", "DataReadBytes", "FileSystemId", "${filesystemid}", { "id": "datareadbytes", "visible": false } ],
+                    [ "AWS/FSx", "DataReadBytes", "FileSystemId", "fs-0e5b870b42089908b", { "id": "datareadbytes", "visible": false } ],
                     [ ".", "DataWriteBytes", ".", ".", { "id": "datawritebytes", "visible": false } ],
                     [ { "id": "totalthroughput", "expression": "totaldatabytes/PERIOD(datareadbytes)", "label": "Total Throughput (B/s)", "region": "${region}" } ],
                     [ { "id": "datawritethroughput", "expression": "datawritebytes/PERIOD(datawritebytes)", "label": "Data Write Throughput (B/s)", "region": "${region}" } ],
@@ -67,13 +67,38 @@
         },
         {
             "type": "metric",
-            "x": 18,
-            "y": 0,
-            "width": 6,
+            "x": 0,
+            "y": 12,
+            "width": 12,
             "height": 6,
             "properties": {
                 "metrics": [
-                    [ "AWS/FSx", "DataReadBytes", "FileSystemId", "${filesystemid}", { "id": "datareadbytes", "visible": false } ],
+                    [ "AWS/FSx", "DataReadBytes", "FileSystemId", "fs-0e5b870b42089908b", { "id": "datareadbytes" } ],
+                    [ ".", "DataWriteBytes", ".", ".", { "id": "datawritebytes" } ],
+                    [ { "id": "totalthroughput", "expression": "datawritebytes/PERIOD(datawritebytes)", "label": "Total Throughput (B/s)", "region": "${region}", "visible": false } ],
+                    [ { "id": "datawritethroughput", "expression": "SUM(METRICS())/PERIOD(datareadbytes)", "label": "Data Write Throughput (B/s)", "region": "${region}", "visible": false } ],
+                    [ { "id": "datareadhroughput", "expression": "datareadbytes/PERIOD(datareadbytes)", "label": "Data Read Throughput (B/s)", "region": "${region}", "visible": false } ],
+                    [ { "id": "totaldatabytes", "expression": "datareadbytes+datawritebytes", "label": "TotalDataBytes", "region": "${region}" } ],
+                    [ { "id": "datawritepercent", "expression": "datawritebytes*100/totaldatabytes", "label": "Data Write Throughput (%)", "region": "${region}", "visible": false } ],
+                    [ { "id": "datareadpercent", "expression": "datareadbytes*100/totaldatabytes", "label": "Data Read Throughput (%)", "region": "${region}", "visible": false } ]
+                ],
+                "view": "timeSeries",
+                "title": "Data Bytes",
+                "period": 60,
+                "stacked": false,
+                "stat": "Sum",
+                "region": "${region}"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 6,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/FSx", "DataReadBytes", "FileSystemId", "fs-0e5b870b42089908b", { "id": "datareadbytes", "visible": false } ],
                     [ ".", "DataWriteBytes", ".", ".", { "id": "datawritebytes", "visible": false } ],
                     [ { "id": "totalthroughput", "expression": "datawritebytes/PERIOD(datawritebytes)", "label": "Total Throughput (B/s)", "region": "${region}", "visible": false } ],
                     [ { "id": "datawritethroughput", "expression": "SUM(METRICS())/PERIOD(datareadbytes)", "label": "Data Write Throughput (B/s)", "region": "${region}", "visible": false } ],

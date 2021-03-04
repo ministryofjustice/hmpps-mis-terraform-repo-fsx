@@ -1,7 +1,5 @@
-#dashboard
-
 resource "aws_cloudwatch_dashboard" "misfsx" {
-  dashboard_name = "mis-${local.environment_name}-monitoring-fsx"
+  dashboard_name = "mis-${local.environment_name}-monitoring-fsx-filesystem"
   dashboard_body = data.template_file.dashboard-body.rendered
 }
 
