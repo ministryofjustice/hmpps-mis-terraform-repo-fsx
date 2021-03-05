@@ -55,7 +55,9 @@ locals {
   storage_type = "SSD"
   throughput_capacity = 64 # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
   automatic_backup_retention_days = 7 # Minimum of 0 and maximum of 90. Defaults to 7. Set to 0 to disable.
-  copy_tags_to_backups            = false
+  
+  copy_tags_to_backups            = var.fsx_copy_tags_to_backups
+
   daily_automatic_backup_start_time = "03:00"
   deployment_type                   = "MULTI_AZ_1"
 
