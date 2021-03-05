@@ -6,8 +6,8 @@ resource "aws_cloudwatch_dashboard" "misfsx" {
 data "template_file" "dashboard-body" {
   template = file("templates/mis-fsx-dashboard.json")
   vars = {
-    region            = var.region
-    environment_name  = local.environment_name
-    filesystemid      = local.filesystemid
+    region           = var.region
+    environment_name = local.environment_name
+    filesystemid     = local.filesystemid
   }
 }

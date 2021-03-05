@@ -48,19 +48,19 @@ locals {
   # ================================================================================
   # Active Directory
   # ================================================================================
-  domain_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
+  domain_name                        = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
   mis_fsx_integration_security_group = data.terraform_remote_state.fsx-integration.outputs.mis_fsx_integration_security_group
 
-  storage_capacity = 300
-  storage_type = "SSD"
-  throughput_capacity = 64 # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
-  automatic_backup_retention_days = 7 # Minimum of 0 and maximum of 90. Defaults to 7. Set to 0 to disable.
-  
-  copy_tags_to_backups            = var.fsx_copy_tags_to_backups
+  storage_capacity                = 300
+  storage_type                    = "SSD"
+  throughput_capacity             = 64 # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
+  automatic_backup_retention_days = 7  # Minimum of 0 and maximum of 90. Defaults to 7. Set to 0 to disable.
+
+  copy_tags_to_backups = var.fsx_copy_tags_to_backups
 
   daily_automatic_backup_start_time = "03:00"
   deployment_type                   = "MULTI_AZ_1"
 
-  weekly_maintenance_start_time  = "2:02:30"
-  aliases                        = local.common_name
+  weekly_maintenance_start_time = "2:02:30"
+  aliases                       = local.common_name
 }

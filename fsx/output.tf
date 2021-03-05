@@ -8,26 +8,26 @@
 
 output "mis_bfs_filesystem" {
   value = {
-    id                             = aws_fsx_windows_file_system.mis_bfs.id
-    arn                            = aws_fsx_windows_file_system.mis_bfs.arn
-    name                           = local.bfs_filesystem_name
-    dns_name                       = aws_fsx_windows_file_system.mis_bfs.dns_name
-    network_interface_ids          = aws_fsx_windows_file_system.mis_bfs.network_interface_ids
-    vpc_id                         = aws_fsx_windows_file_system.mis_bfs.vpc_id
-    preferred_file_server_ip       = aws_fsx_windows_file_system.mis_bfs.preferred_file_server_ip
-    remote_administration_endpoint = aws_fsx_windows_file_system.mis_bfs.remote_administration_endpoint
-    preferred_subnet_id            = local.preferred_subnet_id
-    secondary_subnet_id            = local.secondary_subnet_id
-    security_group_id              = aws_security_group.mis-fsx.id
-    storage_capacity               = local.storage_capacity
-    storage_type                   = local.storage_type
-    throughput_capacity            = local.throughput_capacity
-    tags                           = local.tags
-    deployment_type                = local.deployment_type
-    weekly_maintenance_start_time  = local.weekly_maintenance_start_time
+    id                                = aws_fsx_windows_file_system.mis_bfs.id
+    arn                               = aws_fsx_windows_file_system.mis_bfs.arn
+    name                              = local.bfs_filesystem_name
+    dns_name                          = aws_fsx_windows_file_system.mis_bfs.dns_name
+    network_interface_ids             = aws_fsx_windows_file_system.mis_bfs.network_interface_ids
+    vpc_id                            = aws_fsx_windows_file_system.mis_bfs.vpc_id
+    preferred_file_server_ip          = aws_fsx_windows_file_system.mis_bfs.preferred_file_server_ip
+    remote_administration_endpoint    = aws_fsx_windows_file_system.mis_bfs.remote_administration_endpoint
+    preferred_subnet_id               = local.preferred_subnet_id
+    secondary_subnet_id               = local.secondary_subnet_id
+    security_group_id                 = aws_security_group.mis-fsx.id
+    storage_capacity                  = local.storage_capacity
+    storage_type                      = local.storage_type
+    throughput_capacity               = local.throughput_capacity
+    tags                              = local.tags
+    deployment_type                   = local.deployment_type
+    weekly_maintenance_start_time     = local.weekly_maintenance_start_time
     daily_automatic_backup_start_time = local.daily_automatic_backup_start_time
-    automatic_backup_retention_days = local.automatic_backup_retention_days
-    aliases                         = local.aliases
+    automatic_backup_retention_days   = local.automatic_backup_retention_days
+    aliases                           = local.aliases
   }
 }
 

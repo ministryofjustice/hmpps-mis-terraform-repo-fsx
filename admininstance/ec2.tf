@@ -60,12 +60,12 @@ resource "aws_instance" "admin_server" {
   )
 
   monitoring = true
-  
+
   root_block_device {
     volume_size = local.admin_root_size
   }
 
-  user_data  = element(data.template_file.instance_userdata.*.rendered, count.index)
+  user_data = element(data.template_file.instance_userdata.*.rendered, count.index)
 
   # Copies the scripts/* to admin instance
   # provisioner "file" {

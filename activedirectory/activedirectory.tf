@@ -2,14 +2,14 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/directory_service_directory
 
 resource "aws_directory_service_directory" "mis_ad" {
-  name        = "${local.environment_name}.local"    # ie. delius-mis-dev.local
-  short_name  = local.environment_name               # ie. delius-mis-dev
+  name        = "${local.environment_name}.local" # ie. delius-mis-dev.local
+  short_name  = local.environment_name            # ie. delius-mis-dev
   description = "Microsoft AD for ${local.environment_name}.local"
   password    = data.aws_ssm_parameter.ad_admin_password.value
   enable_sso  = false
   type        = "MicrosoftAD"
   edition     = "Standard"
-  
+
 
   vpc_settings {
     vpc_id     = local.vpc_id
@@ -27,7 +27,7 @@ resource "aws_directory_service_directory" "mis_ad" {
   # When we run tf plan against an already created AD it will always show the AD needs destroy/create so we ignore
   lifecycle {
     ignore_changes = [
-      password  
+      password
     ]
   }
 
