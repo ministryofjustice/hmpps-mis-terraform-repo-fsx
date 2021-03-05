@@ -15,4 +15,4 @@ variable "environment_name" {
 
 variable "mis_alarms_enabled" {
   default = "true"
-} 
+}

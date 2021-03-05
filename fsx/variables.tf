@@ -30,6 +30,6 @@ variable "mis_app_name" {
   default = "mis"
 }
 
-# variable "kms_key_id" {
-
-# }
+variable "fsx_copy_tags_to_backups" {
+  default = false
+}

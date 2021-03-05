@@ -23,43 +23,43 @@ resource "aws_security_group" "mis-fsx" {
 }
 
 resource "aws_security_group_rule" "fsx_ingress_all_internal" {
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
-  security_group_id        = aws_security_group.mis-fsx.id
-  self                     = true
-  description              = "ingress ALL security group internal traffic"
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  security_group_id = aws_security_group.mis-fsx.id
+  self              = true
+  description       = "ingress ALL security group internal traffic"
 }
 
 resource "aws_security_group_rule" "fsx_egress_all_internal" {
-  type                     = "egress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = -1
-  security_group_id        = aws_security_group.mis-fsx.id
-  self                     = true
-  description              = "egress ALL security group internal traffic"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  security_group_id = aws_security_group.mis-fsx.id
+  self              = true
+  description       = "egress ALL security group internal traffic"
 }
 
 resource "aws_security_group_rule" "fsx_egress_tcp_53" {
-  type                     = "egress"
-  from_port                = 53
-  to_port                  = 53
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.mis-fsx.id
-  cidr_blocks              = ["0.0.0.0/0"]
-  description              = "egresss to tcp/53 DNS"
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "tcp"
+  security_group_id = aws_security_group.mis-fsx.id
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "egresss to tcp/53 DNS"
 }
 
 resource "aws_security_group_rule" "fsx_egress_udp_53" {
-  type                     = "egress"
-  from_port                = 53
-  to_port                  = 53
-  protocol                 = "udp"
-  security_group_id        = aws_security_group.mis-fsx.id
-  cidr_blocks              = ["0.0.0.0/0"]
-  description              = "egress to udp/53 DNS"
+  type              = "egress"
+  from_port         = 53
+  to_port           = 53
+  protocol          = "udp"
+  security_group_id = aws_security_group.mis-fsx.id
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "egress to udp/53 DNS"
 }
 
 # allow egress to AD Domain Controllers -  TCP 88, 135,389, 445, 464, 636, 3268, 9389, 49152-65535
@@ -112,7 +112,7 @@ resource "aws_security_group_rule" "fsx_egress_ad_tcp_464" {
   source_security_group_id = data.terraform_remote_state.activedirectory.outputs.mis_ad["security_group_id"]
   description              = "egress tcp/464 Change/Set password"
 }
-  
+
 resource "aws_security_group_rule" "fsx_egress_ad_tcp_636" {
   type                     = "egress"
   from_port                = 636

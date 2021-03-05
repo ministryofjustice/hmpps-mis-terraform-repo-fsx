@@ -23,3 +23,9 @@ data "terraform_remote_state" "vpc" {
     region = var.region
   }
 }
+
+# AD Admin User Password
+# /delius-mis-dev/delius/mis-activedirectory/ad/ad_admin_password
+data "aws_ssm_parameter" "ad_admin_password" {
+  name = "/${local.environment_name}/delius/mis-activedirectory/ad/ad_admin_password"
+}
