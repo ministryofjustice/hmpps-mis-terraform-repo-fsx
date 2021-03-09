@@ -50,8 +50,8 @@ $ADDNSServerIP  = $DNSIPAddr1 #"10.162.35.251"
 Write-Output '================================================================'
 Write-Output ' Get VPC DNS Server to forward DNS queries to Route53'
 Write-Output '================================================================'
-$VPCEC2DhcpOption = Get-EC2DhcpOption | ? {$_.Tags.Key -eq "Name" -and $_.Tags.Value -eq "${EnvName}-dhcp-options"}
-$VPCDomainNameServers = $EC2DhcpOption.DhcpConfigurations | Where {$_.Key -eq "domain-name-servers"}
+$VPCEC2DhcpOption = Get-EC2DhcpOption | ? {$_.Tags.Key -eq "Name" -and $_.Tags.Value -eq "${EnvironmentName}-dhcp-options"}
+$VPCDomainNameServers = $VPCEC2DhcpOption.DhcpConfigurations | Where {$_.Key -eq "domain-name-servers"}
 $VPCDNSServer = $VPCDomainNameServers.Value
 Write-Output "VPCDNSServer: $VPCDNSServer"
 
