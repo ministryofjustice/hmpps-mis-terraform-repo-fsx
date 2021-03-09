@@ -42,7 +42,7 @@ data "terraform_remote_state" "activedirectory" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/activedirectory/terraform.tfstate"
+    key    = "${var.environment_type}/activedirectory/terraform.tfstate"
     region = var.region
   }
 }
@@ -56,7 +56,7 @@ data "terraform_remote_state" "fsx" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/fsx/terraform.tfstate"
+    key    = "${var.environment_type}/fsx/terraform.tfstate"
     region = var.region
   }
 }
