@@ -47,7 +47,11 @@ $svc_password = Get-SSMParameter -Name $svc_password_SSMPath -WithDecryption $tr
 
 $ServiceUsername = $svc_username.Value
 
-$OUPath = "OU=Users,OU=delius-mis-dev,DC=delius-mis-dev,DC=local"
+# netbios names limit of 15 chars so delius-auto-test has to be truncated to delius-auto-tes
+# other env names are under 15 chars so not truncated
+$domainname = $domainname.SubString(0,15)
+$OUPath = "OU=Users,OU=${domainname},DC=${domainname},DC=local"
+
 Write-Output "Creating the user ${ServiceUsername} in '${OUPath}'"
 $SecureAccountPassword = $svc_password.Value | ConvertTo-SecureString -AsPlainText -Force
 New-ADUser -Name $ServiceUsername -GivenName $ServiceUsername -Surname "" -Path $OUPath -AccountPassword $SecureAccountPassword -Enabled $true
