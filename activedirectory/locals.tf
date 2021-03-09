@@ -14,7 +14,7 @@ locals {
   subnet_ids = tolist([local.private_subnet_ids[0], local.private_subnet_ids[1]])
 
   mis_ad_name       = "${local.environment_name}.local" # delius-mis-dev.local
-  mis_ad_short_name = local.environment_name            # delius-mis-dev
+  mis_ad_short_name = substr(var.environment_name,0,15) # 15 char limit in shortname for AD. ie. delius-mis-dev
 
   tags = merge(
     data.terraform_remote_state.vpc.outputs.tags,
