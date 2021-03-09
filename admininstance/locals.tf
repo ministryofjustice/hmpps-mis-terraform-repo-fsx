@@ -43,4 +43,5 @@ locals {
     }
   )
 
+  ssm_adjoin_document_name = data.terraform_remote_state.ssm.outputs.awsconfig_Domain_document["name"]
 }
