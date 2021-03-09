@@ -94,7 +94,7 @@ data "terraform_remote_state" "mis-bfs-ha" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/mis-bfs-ha/terraform.tfstate"
+    key    = "${var.environment_type}/mis-bfs-ha/terraform.tfstate"
     region = var.region
   }
 }
@@ -107,7 +107,7 @@ data "terraform_remote_state" "activedirectory" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/activedirectory/terraform.tfstate"
+    key    = "${var.environment_type}/activedirectory/terraform.tfstate"
     region = var.region
   }
 }
@@ -121,7 +121,7 @@ data "terraform_remote_state" "fsx" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/fsx/terraform.tfstate"
+    key    = "${var.environment_type}/fsx/terraform.tfstate"
     region = var.region
   }
 }
@@ -134,7 +134,7 @@ data "terraform_remote_state" "ssm" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/ssm/terraform.tfstate"
+    key    = "${var.environment_type}/ssm/terraform.tfstate"
     region = var.region
   }
 }

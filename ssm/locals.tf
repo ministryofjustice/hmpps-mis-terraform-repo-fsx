@@ -1,5 +1,6 @@
 locals {
 
+
   tags = merge(
     data.terraform_remote_state.vpc.outputs.tags,
     {
@@ -12,8 +13,9 @@ locals {
   # ================================================================================
   # Active Directory
   # ================================================================================
-  directory_id      = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
-  directory_name    = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
-  directory_dns_ips = data.terraform_remote_state.activedirectory.outputs.mis_ad_dns_ip_addresses
+  directory_id         = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
+  directory_name       = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_name"]
+  directory_short_name = data.terraform_remote_state.activedirectory.outputs.mis_ad["domain_short_name"]
+  directory_dns_ips    = data.terraform_remote_state.activedirectory.outputs.mis_ad_dns_ip_addresses
 
 }

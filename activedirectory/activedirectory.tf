@@ -2,8 +2,9 @@
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/directory_service_directory
 
 resource "aws_directory_service_directory" "mis_ad" {
-  name        = "${local.environment_name}.local" # ie. delius-mis-dev.local
-  short_name  = local.environment_name            # ie. delius-mis-dev
+  name        = local.mis_ad_name
+  short_name  = local.mis_ad_short_name 
+
   description = "Microsoft AD for ${local.environment_name}.local"
   password    = data.aws_ssm_parameter.ad_admin_password.value
   enable_sso  = false

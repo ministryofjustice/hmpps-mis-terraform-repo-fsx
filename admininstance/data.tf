@@ -87,19 +87,6 @@ data "terraform_remote_state" "vpc" {
 }
 
 #-------------------------------------------------------------
-### Getting the vpc details
-#-------------------------------------------------------------
-data "terraform_remote_state" "mis-bfs-ha" {
-  backend = "s3"
-
-  config = {
-    bucket = var.remote_state_bucket_name
-    key    = "mis-dev/mis-bfs-ha/terraform.tfstate"
-    region = var.region
-  }
-}
-
-#-------------------------------------------------------------
 ### Getting the active directory details
 #-------------------------------------------------------------
 data "terraform_remote_state" "activedirectory" {
@@ -107,7 +94,7 @@ data "terraform_remote_state" "activedirectory" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/activedirectory/terraform.tfstate"
+    key    = "${var.environment_type}/activedirectory/terraform.tfstate"
     region = var.region
   }
 }
@@ -121,7 +108,20 @@ data "terraform_remote_state" "fsx" {
 
   config = {
     bucket = var.remote_state_bucket_name
-    key    = "mis-dev/fsx/terraform.tfstate"
+    key    = "${var.environment_type}/fsx/terraform.tfstate"
+    region = var.region
+  }
+}
+
+#-------------------------------------------------------------
+### Getting the ssm document details
+#-------------------------------------------------------------
+data "terraform_remote_state" "ssm" {
+  backend = "s3"
+
+  config = {
+    bucket = var.remote_state_bucket_name
+    key    = "${var.environment_type}/ssm/terraform.tfstate"
     region = var.region
   }
 }
