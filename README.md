@@ -57,21 +57,51 @@ These tags can be progressed through the environments towards Production by spec
 The tag value is retrieved from AWS SSM Parameter Store. See https://github.com/ministryofjustice/delius-versions
 The version retrieved from the AWS SSM Parameter Store is set by updating the tag value in the map `hmpps-delius-core-terraform` in `config/020-delius-core.tfvars` for the environment.
 
-### Jenkins file
+### Deployment
 
-This jenkinsfile has two parameters (not to be confused with AWS SSM Parameters)
-- CONFIG_BRANCH
-- DCORE_BRANCH
+#### Notes: 
+- FSx requires Terraform 0.13 or above
+- Remember to update ENVIRONMENT in each command :o)
 
-This has been used to specify the branch to use in place of the default `master` branch. Going forward the default will be the Git tag or branch specified in the AWS SSM Parameter Store. However the option to override will still be available for development, debugging and hotfix situations.
+#### 1. ActiveDirectory
+```
+export TF_VAR_ad_admin_password=$$$ValueFromSSMParameterStore$$$
 
-*psuedo code*
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=activedirectory tg plan
+
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=activedirectory tg apply
+```
+
+#### 2. FSx Filesystem
+```
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=fsx tg plan
+
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=fsx tg apply
+```
+
+#### 3. ssm document to allow auto AD Join for Windows instances
+```
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=ssm tg plan
+```
+
+#### 4. DNS - Create Route53 Resolvers to allow non AD Joined instances to resolve AD joined *.local instances using the AD DNS Servers
+```
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=dns tg plan
+
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=dns tg apply
+```
+
+#### 5. Create the Admin Instances
+```
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=admininstance tg plan
+
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=admininstance tg apply
 
 ```
-if ("aws ssm parameter version" not empty and "DCORE_BRANCH" not defaultValue)
-  set "delius core version" to "aws ssm parameter version"
-else
-  set "delius core version" to "DCORE_BRANCH"
-else
-  error
+
+#### 6. Create the FSx Alarms & Dashboards
+```
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=monitoring-fsx tg plan
+
+ENVIRONMENT=delius-auto-test CONTAINER=mojdigitalstudio/hmpps-terraform-builder-0-13 COMPONENT=monitoring-fsx tg apply
 ```
