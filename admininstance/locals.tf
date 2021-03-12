@@ -20,8 +20,9 @@ locals {
   nart_prefix = substr(local.nart_role, 0, length(local.nart_role) - 1)
 
   admin_server_count  = 2
-  admin_instance_type = "t2.xlarge"
-  admin_instance_ami  = "ami-023b643326f4d6eff"
+  admin_instance_type = "t2.large"
+  admin_instance_ami  = "ami-001235003919090f0" # HMPPS MIS NART ADM Windows Server master 1615546824 (0.33.0)
+
   admin_root_size     = 50
   hostname            = "${local.environment_name}-${local.nart_prefix}"
 

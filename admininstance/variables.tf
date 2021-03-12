@@ -45,4 +45,3 @@ variable "environment_name" {
 variable "snap_tag" {
   default = "CreateSnapshotBFS"
 }
-
