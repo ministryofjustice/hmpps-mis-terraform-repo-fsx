@@ -69,12 +69,6 @@ resource "aws_instance" "admin_server" {
 
   user_data = element(data.template_file.instance_userdata.*.rendered, count.index)
 
-  # Copies the scripts/* to admin instance
-  # provisioner "file" {
-  #   source      = "../scripts"
-  #   destination = "C:\\Setup"
-  # }
-
   lifecycle {
     ignore_changes = [
       ami,
