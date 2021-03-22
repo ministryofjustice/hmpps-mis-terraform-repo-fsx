@@ -72,6 +72,9 @@ Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\SVC_DS_AD_DEV"
 # delius-mis-dev\SVC_BOSSO-NDL
 Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\SVC_BOSSO-NDL" -AccessRight Full -Force
 
+# delius-mis-dev\SVC_DFI_NDL
+Grant-FSxSmbShareAccess -Name 'share' -AccountName "${domainName}\SVC_DFI_NDL" -AccessRight Full -Force
+
 # everyone
 Revoke-FSxSmbShareAccess -Name 'share' -AccountName 'everyone' -Force
 
