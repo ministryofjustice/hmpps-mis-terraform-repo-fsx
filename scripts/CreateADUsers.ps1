@@ -130,6 +130,8 @@ foreach ($user in $AdminUsers) {
       Write-Output "Adding User '$user' to group '$AdminTeamGroups'"
       AddGroupMember $user $group
    }
+   Write-Output "Enabling user account ${user}"
+   Enable-ADAccount -Identity $user
 }
 
 write-output '================================================================================'
@@ -143,4 +145,8 @@ foreach ($user in $MISTeamUsers) {
        Write-Output "Adding User '$user' to group '$group'"
        AddGroupMember $user $group
    }
+   Write-Output "Enabling user account ${user}"
+   Enable-ADAccount -Identity $user
 }
+
+
