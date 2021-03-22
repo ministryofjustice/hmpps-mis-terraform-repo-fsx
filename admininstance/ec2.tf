@@ -27,7 +27,7 @@ resource "null_resource" "userdata_rendered" {
 # Iteratively create EC2 instances
 resource "aws_instance" "admin_server" {
   count         = local.admin_server_count
-  ami           = local.admin_instance_ami #data.aws_ami.amazon_ami.id
+  ami           = local.admin_instance_ami 
   instance_type = local.admin_instance_type
 
   # element() function wraps if index > list count, so we get an even distribution across AZ subnets
@@ -68,12 +68,6 @@ resource "aws_instance" "admin_server" {
   }
 
   user_data = element(data.template_file.instance_userdata.*.rendered, count.index)
-
-  # Copies the scripts/* to admin instance
-  # provisioner "file" {
-  #   source      = "../scripts"
-  #   destination = "C:\\Setup"
-  # }
 
   lifecycle {
     ignore_changes = [
