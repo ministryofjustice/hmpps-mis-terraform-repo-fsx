@@ -39,16 +39,16 @@ $Endpoint = $FileSystem.WindowsConfiguration.RemoteAdministrationEndpoint
 Write-Output "Powershell Endpoint: $Endpoint"
 
 #============================================================
-# Open a session to the target FSx Powershell endpoint 
+# Open a session to the target FSx Powershell endpoint
 #============================================================
-$Session = New-PSSession -ComputerName $Endpoint -ConfigurationName FSxRemoteAdmin     
+$Session = New-PSSession -ComputerName $Endpoint -ConfigurationName FSxRemoteAdmin
 
 Import-PsSession $Session -AllowClobber
 $Session
 
 #============================================================
-# The following commands run in the context of the Imported 
-# Session so are actually being run on the target FSx instance 
+# The following commands run in the context of the Imported
+# Session so are actually being run on the target FSx instance
 #============================================================
 
 # Get the FSx Share details
