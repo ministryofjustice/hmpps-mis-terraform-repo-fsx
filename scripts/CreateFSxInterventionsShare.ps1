@@ -1,5 +1,4 @@
 
-
 # show commands for Fsx
 # Get-Command -Module FSxRemoteAdmin
 
@@ -40,6 +39,12 @@ $Tags | ft *
 $Endpoint = $FileSystem.WindowsConfiguration.RemoteAdministrationEndpoint
 Write-Output "Powershell Endpoint: $Endpoint"
 
+#===================================================================================
+# Create the folder on D:\dfinterventions on the FSx fileservers so we can share it. 
+#===================================================================================
+$FileSystemDNSName=$FileSystem.DNSName
+New-Item -Type Directory -Path "\\${FileSystemDNSName}\D$\dfinterventions"
+
 #============================================================
 # Open a session to the target FSx Powershell endpoint 
 #============================================================
@@ -48,8 +53,7 @@ $Session = New-PSSession -ComputerName $Endpoint -ConfigurationName FSxRemoteAdm
 Import-PsSession $Session -AllowClobber
 $Session
 
-
-New-FSxSmbShare -Name "dfinterventions" -Path "D:\share\dfinterventions" -Description "DF Interventions share" -ContinuouslyAvailable $True 
+New-FSxSmbShare -Name "dfinterventions" -Path "D:\dfinterventions" -Description "DF Interventions share" -ContinuouslyAvailable $True 
 
 # NT AUTHORITY\SYSTEM - MANDATORY permission
 Grant-FSxSmbShareAccess -Name 'dfinterventions' -AccountName 'NT AUTHORITY\SYSTEM' -AccessRight Full -Force
@@ -65,4 +69,3 @@ Get-FSxSmbShareAccess -Name 'dfinterventions'
 #============================================================
 Disconnect-PsSession $Session
 $Session
-

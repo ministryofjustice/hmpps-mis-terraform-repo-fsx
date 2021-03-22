@@ -63,6 +63,9 @@ Get-FSxSmbShareAccess -Name 'dfinterventions'
 # NT AUTHORITY\SYSTEM - MANDATORY permission
 Grant-FSxSmbShareAccess -Name 'dfinterventions' -AccountName 'NT AUTHORITY\SYSTEM' -AccessRight Full -Force
 
+# delius-mis-dev\AWS Delegated Administrators
+Grant-FSxSmbShareAccess -Name 'dfinterventions' -AccountName "${domainName}\AWS Delegated Administrators"  -AccessRight Full -Force
+
 # delius-mis-dev\SVC_DFI_NDL
 Grant-FSxSmbShareAccess -Name 'dfinterventions' -AccountName "${domainName}\SVC_DFI_NDL" -AccessRight Full -Force
 
