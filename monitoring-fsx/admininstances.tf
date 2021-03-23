@@ -79,8 +79,6 @@ resource "aws_cloudwatch_metric_alarm" "admininstance_MemoryUtilization_warning"
 
   dimensions = {
     InstanceId   = data.terraform_remote_state.admininstance.outputs.admin_instance_ids[count.index]
-    ImageId      = data.terraform_remote_state.admininstance.outputs.admin_ami_id[count.index]
-    InstanceType = data.terraform_remote_state.admininstance.outputs.admin_instance_type
     objectname   = "Memory"
   }
 }

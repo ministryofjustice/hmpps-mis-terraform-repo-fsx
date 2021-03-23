@@ -40,6 +40,15 @@ Write-Output "------------------------------------"
 $MaxSize = (Get-PartitionSupportedSize -DriveLetter C).sizeMax
 Resize-Partition -DriveLetter C -Size $MaxSize
 
+Write-Output "----------------------------------------------"
+Write-Output " Run all scripts that apply runtime config"
+Write-Output "----------------------------------------------"
+$runtimeconfig = 'c:\setup\runtimeconfig'
+Get-ChildItem $runtimeconfig -Filter *.ps1 | 
+    Foreach-Object {
+        & $runtimeconfig\$_
+    }
+
 Write-Output "------------------------------------"
 Write-Output "Auto Add to AD"
 Write-Output "------------------------------------"
