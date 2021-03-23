@@ -72,6 +72,9 @@ Grant-FSxSmbShareAccess -Name 'dfinterventions' -AccountName "${domainName}\SVC_
 # everyone
 Revoke-FSxSmbShareAccess -Name 'dfinterventions' -AccountName 'everyone' -Force
 
+# Get the File Share Permissions
+Get-FSxSmbShareAccess -Name 'dfinterventions'
+
 #============================================================
 # Disconnect remote session
 #============================================================
