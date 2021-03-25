@@ -9,10 +9,10 @@ resource "aws_cloudwatch_metric_alarm" "fsx_filesystem_warning" {
   namespace                 = "AWS/FSx"
   period                    = "120"
   statistic                 = "Average"
-  threshold                 = "128849018880"
+  threshold                 = "64424509440"
   alarm_actions             = [data.aws_sns_topic.mis_alarm_notification.arn]
   ok_actions                = [data.aws_sns_topic.mis_alarm_notification.arn]
-  alarm_description         = "FSx Filesystem Free Storage Capacity is less than 10% (120GB)"
+  alarm_description         = "FSx Filesystem Free Storage Capacity is less than 20% (60GB)"
   insufficient_data_actions = []
   tags                      = local.tags
 
@@ -31,10 +31,10 @@ resource "aws_cloudwatch_metric_alarm" "fsx_filesystem_critical" {
   namespace                 = "AWS/FSx"
   period                    = "120"
   statistic                 = "Average"
-  threshold                 = "64424509440"
+  threshold                 = "32212254720"
   alarm_actions             = [data.aws_sns_topic.mis_alarm_notification.arn]
   ok_actions                = [data.aws_sns_topic.mis_alarm_notification.arn]
-  alarm_description         = "FSx Filesystem Free Storage Capacity is less than 10% (60GB)"
+  alarm_description         = "FSx Filesystem Free Storage Capacity is less than 10% (30GB)"
   insufficient_data_actions = []
   tags                      = local.tags
 

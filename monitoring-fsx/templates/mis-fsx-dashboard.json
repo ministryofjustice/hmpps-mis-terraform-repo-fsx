@@ -2,27 +2,8 @@
     "widgets": [
         {
             "type": "metric",
-            "x": 0,
-            "y": 0,
-            "width": 12,
-            "height": 6,
-            "properties": {
-                "title": "Free storage capacity",
-                "view": "timeSeries",
-                "period": 60,
-                "stacked": false,
-                "stat": "Sum",
-                "metrics": [
-                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
-                    [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)*60", "label": "Free storage capacity" } ]
-                ],
-                "region": "${region}"
-            }
-        },
-        {
-            "type": "metric",
             "x": 12,
-            "y": 0,
+            "y": 6,
             "width": 12,
             "height": 6,
             "properties": {
@@ -93,7 +74,7 @@
         {
             "type": "metric",
             "x": 12,
-            "y": 6,
+            "y": 12,
             "width": 12,
             "height": 6,
             "properties": {
@@ -113,6 +94,84 @@
                 "stacked": false,
                 "stat": "Sum",
                 "region": "${region}"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
+                    [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)*60", "label": "Free storage capacity", "region": "${region}" } ],
+                    [ { "expression": "300000000000-e1", "label": "Used Storage Capacity", "id": "e2", "region": "${region}" } ]
+                ],
+                "title": "Storage Capacity (GiB)",
+                "view": "timeSeries",
+                "period": 60,
+                "stacked": false,
+                "stat": "Sum",
+                "region": "${region}"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 18,
+            "y": 0,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
+                    [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)*60", "label": "Free storage capacity", "region": "${region}", "visible": false } ],
+                    [ { "expression": "100*(e2/322122547200)", "label": "Percent Storage Used", "id": "e3", "region": "${region}" } ],
+                    [ { "expression": "322122547200-e1", "label": "Used Storage capacity", "id": "e2", "visible": false, "region": "${region}" } ],
+                    [ { "expression": "100-e3", "label": "Percent Storage Free", "id": "e4", "region": "${region}" } ]
+                ],
+                "title": "Storage (Percent)",
+                "view": "timeSeries",
+                "period": 60,
+                "stacked": true,
+                "stat": "Sum",
+                "region": "${region}",
+                "setPeriodToTimeRange": true,
+                "annotations": {
+                    "horizontal": [
+                        {
+                            "label": "Warning Alarm %",
+                            "value": 80
+                        },
+                        {
+                            "label": "Critical Alarm %",
+                            "value": 90
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12,
+            "y": 0,
+            "width": 6,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/FSx", "FreeStorageCapacity", "FileSystemId", "${filesystemid}", { "id": "m1", "visible": false } ],
+                    [ { "id": "e1", "expression": "SUM(METRICS())/PERIOD(m1)*60", "label": "Free storage capacity", "region": "${region}", "visible": false } ],
+                    [ { "expression": "100*(e2/322122547200)", "label": "Percent Storage Used", "id": "e3", "region": "${region}" } ],
+                    [ { "expression": "322122547200-e1", "label": "Used Storage capacity", "id": "e2", "visible": false, "region": "${region}" } ],
+                    [ { "expression": "100-e3", "label": "Percent Storage Free", "id": "e4", "region": "${region}" } ]
+                ],
+                "title": "Storage (Percent)",
+                "view": "pie",
+                "period": 60,
+                "stacked": true,
+                "stat": "Sum",
+                "region": "${region}",
+                "setPeriodToTimeRange": true
             }
         }
     ]
