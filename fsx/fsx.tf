@@ -3,8 +3,8 @@
 resource "aws_fsx_windows_file_system" "mis_bfs" {
 
   active_directory_id               = data.terraform_remote_state.activedirectory.outputs.mis_ad["id"]
-  storage_capacity                  = local.storage_capacity
-  throughput_capacity               = local.throughput_capacity
+  storage_capacity                  = local.fsx_bfs_fileshare_size
+  throughput_capacity               = local.fsx_bfs_fileshare_throughput
   subnet_ids                        = local.subnet_ids
   preferred_subnet_id               = local.preferred_subnet_id
   automatic_backup_retention_days   = local.automatic_backup_retention_days
