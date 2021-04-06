@@ -33,3 +33,11 @@ variable "mis_app_name" {
 variable "fsx_copy_tags_to_backups" {
   default = false
 }
+
+variable "fsx_bfs_fileshare_size" {
+  type = number
+}
+
+variable "fsx_bfs_fileshare_throughput" {
+  type = number
+}

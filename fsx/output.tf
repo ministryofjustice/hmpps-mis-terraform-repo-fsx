@@ -19,9 +19,9 @@ output "mis_bfs_filesystem" {
     preferred_subnet_id               = local.preferred_subnet_id
     secondary_subnet_id               = local.secondary_subnet_id
     security_group_id                 = aws_security_group.mis-fsx.id
-    storage_capacity                  = local.storage_capacity
+    storage_capacity                  = local.fsx_bfs_fileshare_size
     storage_type                      = local.storage_type
-    throughput_capacity               = local.throughput_capacity
+    throughput_capacity               = local.fsx_bfs_fileshare_throughput
     tags                              = local.tags
     deployment_type                   = local.deployment_type
     weekly_maintenance_start_time     = local.weekly_maintenance_start_time
