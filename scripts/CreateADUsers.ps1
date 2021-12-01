@@ -102,7 +102,7 @@ Write-Output "application:     $($application.Value)"
 $OUUsersPathSuffix=",OU=Users,OU=${domainname},DC=${domainname},DC=local"
 
 # Admin Users
-$AdminUsers      = @('ChrisKinsella','SteveJames','EddieNyambudzi','DonNyambudzi','ZakHamed','RanbeerSingh','AdrianWeetman','SebNorris','PiotrGrzeskowiak')
+$AdminUsers      = @('SteveJames','EddieNyambudzi','DonNyambudzi','ZakHamed','RanbeerSingh','AdrianWeetman','SebNorris','PiotrGrzeskowiak')
 $AdminTeamGroups = @("CN=AWS Delegated Administrators,OU=AWS Delegated Groups,DC=${domainname},DC=local")
 
 # MIS Team Users
