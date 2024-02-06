@@ -247,3 +247,13 @@ resource "aws_security_group_rule" "fsx_sg_egress_to_integration_sg" {
   security_group_id        = aws_security_group.mis-fsx.id
   description              = "egress ALL traffic to FSx Integration Security Group"
 }
+
+resource "aws_security_group_rule" "fsx_modernisation_platform_ingress" {
+  type              = "ingress"
+  from_port         = 445
+  to_port           = 445
+  protocol          = "tcp"
+  security_group_id = aws_security_group.mis-fsx.id
+  cidr_blocks       = [local.counterpart_mp_env_cidr[var.environment_name]]
+  description       = "ingress from modernisation platform"
+}
