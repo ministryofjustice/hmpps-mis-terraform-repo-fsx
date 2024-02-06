@@ -65,4 +65,10 @@ locals {
   fsx_bfs_fileshare_size       = var.fsx_bfs_fileshare_size
   fsx_bfs_fileshare_throughput = var.fsx_bfs_fileshare_throughput # MB/Second in power of 2 increments. Minimum of 8 and maximum of 2048.
 
+  counterpart_mp_env_cidr = {
+    delius-mis-dev  = "10.26.24.0/21" #mp hmpps-development
+    delius-stage    = "10.27.0.0/21"  #mp hmpps-preproduction
+    delius-pre-prod = "10.27.0.0/21"  #mp hmpps-preproduction
+    delius-prod     = "10.27.8.0/21"  #mp hmpps-production
+  }
 }
